@@ -11,7 +11,7 @@
   <!-- TUS ESTILOS PERSONALIZADOS -->
   <style>
     :root {
-      /* Colores institucionales que definimos */
+      /* Colores institucionales */
       --color-institucional: #691C32;      /* vino principal */
       --color-institucional-sec: #96606F;  /* derivado que combina */
       --color-link: #96606F;               /* color de links en el texto */
@@ -77,6 +77,31 @@
     .tl-slide .tl-text-content details ul {
       margin: 0.3em 0 0 1.2em;
       padding-left: 0;
+    }
+
+    /* ====== ANIMACIÓN SUAVE PARA ABRIR/CERRAR ====== */
+
+    .tl-slide .tl-text-content details.accordion {
+      margin: 0.4em 0 0.6em 0;
+    }
+
+    /* Cajita que contiene la lista (se anima) */
+    .tl-slide .tl-text-content details.accordion .accordion-body {
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(-4px);
+      transition:
+        max-height 0.25s ease,
+        opacity 0.25s ease,
+        transform 0.25s ease;
+    }
+
+    /* Cuando el details está abierto */
+    .tl-slide .tl-text-content details.accordion[open] .accordion-body {
+      max-height: 500px; /* ajusta si necesitas más alto */
+      opacity: 1;
+      transform: translateY(0);
     }
   </style>
 </head>
