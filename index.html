@@ -198,6 +198,25 @@
   line-height: 1.25;
 }
 
+    /* Separación automática entre tarjetas */
+#timeline-embed .tl-slide .tl-text-content .resident-card{
+  margin: 14px 0;
+}
+
+/* Si quieres una línea solo entre tarjetas (no arriba/abajo) */
+#timeline-embed .tl-slide .tl-text-content .resident-card + .resident-card{
+  position: relative;
+  padding-top: 14px;
+}
+#timeline-embed .tl-slide .tl-text-content .resident-card + .resident-card:before{
+  content:"";
+  position:absolute;
+  top:0; left:0; right:0;
+  height:1px;
+  background: rgba(255,255,255,.18);
+}
+
+
 
 
 
@@ -239,6 +258,7 @@
   </script>
 </body>
 </html>
+
 
 
 
