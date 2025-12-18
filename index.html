@@ -226,17 +226,7 @@
     rgba(255,255,255,0)
   );
 }
-html, body{
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-}
 
-#timeline-embed{
-  width: 100vw;
-  height: 100dvh; /* o 100vh */
-}
 
 
 
@@ -247,7 +237,8 @@ html, body{
 </head>
 <body>
   <!-- Aquí se dibuja la timeline -->
-  <div id="timeline-embed"></div>
+  <div id="timeline-embed" style="width:100%; height:650px;"></div>
+
 
 
   <!-- JS de TimelineJS -->
@@ -282,6 +273,7 @@ html, body{
   </script>
 </body>
 </html>
+
 
 
 
