@@ -231,6 +231,24 @@
 #timeline-embed .tl-slide:has(.slide-2) .tl-media .tl-media-content{
   padding-top: 1px !important;  /* o 0px */
 }
+/* ===== Toggle abrir/cerrar timeline ===== */
+.timeline-wrap{
+  width: 100%;
+  height: 650px;              /* ALTURA ABIERTA (antes la tenías inline) */
+  overflow: hidden;
+  transition: height .35s ease;
+}
+
+/* La timeline debe ocupar el alto del wrap */
+#timeline-embed{
+  width: 100%;
+  height: 100%;
+}
+
+/* Estado cerrado */
+.timeline-wrap.is-collapsed{
+  height: 0px;                /* CERRADO */
+}
 
 
 
@@ -243,8 +261,11 @@
 </head>
 <body>
   <!-- Aquí se dibuja la timeline -->
-  <div id="timeline-embed" style="width:100%; height:650px;"></div>
-
+  
+  
+<div id="timeline-wrap" class="timeline-wrap">
+  <div id="timeline-embed"></div>
+</div>
 
 
   <!-- JS de TimelineJS -->
@@ -259,6 +280,33 @@
       initial_zoom: 0,
       font: "Default"
     });
+
+    // ===== Botón para abrir/cerrar =====
+const wrap = document.getElementById('timeline-wrap');
+const btn  = document.getElementById('toggle-timeline');
+
+let isOpen = true;
+
+btn.addEventListener('click', () => {
+  isOpen = !isOpen;
+  wrap.classList.toggle('is-collapsed', !isOpen);
+
+  // Texto del botón
+  btn.textContent = isOpen ? 'Ocultar' : 'Mostrar completo';
+  btn.setAttribute('aria-expanded', String(isOpen));
+
+  // IMPORTANTÍSIMO: al volver a abrir, forzamos re-render/resize de TimelineJS
+  if (isOpen) {
+    const onEnd = () => {
+      wrap.removeEventListener('transitionend', onEnd);
+      if (window.timeline && typeof window.timeline.updateDisplay === 'function') {
+        window.timeline.updateDisplay();
+      }
+    };
+    wrap.addEventListener('transitionend', onEnd);
+  }
+});
+
 
     // ========= LÓGICA DEL ACORDEÓN (TRANSICIÓN SUAVE) =========
     // Usamos delegación de eventos para que funcione aunque TimelineJS reprocesa el DOM
@@ -279,6 +327,7 @@
   </script>
 </body>
 </html>
+
 
 
 
