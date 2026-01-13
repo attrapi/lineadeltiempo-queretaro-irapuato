@@ -16,6 +16,9 @@
       --color-institucional: #691c32;      /* vino principal */
       --color-institucional-sec: #96606f;  /* derivado que combine */
       --color-link: #96606f;               /* color de links en texto */
+
+      /* ✅ NUEVO: alto de la franja guinda visible abajo */
+      --franja-guinda: 70px; /* ajusta 40–120px */
     }
 
     /* ========= CUADROS DE EVENTOS (TIMENAV) ========= */
@@ -91,6 +94,17 @@
       background-color: #691C32;
       margin: 0;
       padding: 0;
+    }
+
+    /* ✅ NUEVO (recomendado): “pinta” fijo el fondo guinda abajo */
+    body::after{
+      content:"";
+      position: fixed;
+      left: 0; right: 0; bottom: 0;
+      height: var(--franja-guinda);
+      background: #691C32;
+      pointer-events: none;
+      z-index: 0;
     }
 
     /* Poner el caption arriba de la foto */
@@ -212,10 +226,19 @@
     /* ===== Contenedor timeline ===== */
     .timeline-wrap{
       width: 100%;
-      height: 100vh;           /* siempre hasta abajo */
-      min-height: 650px;       /* tu mínimo original */
+
+      /* ✅ CAMBIO CLAVE: levanta TODO el timeline para dejar franja guinda abajo */
+      height: calc(100vh - var(--franja-guinda));
+
+      min-height: 650px;
       overflow: hidden;
       position: relative;
+
+      /* ✅ NUEVO: altura de la “franja” guinda al final cuando está colapsado */
+      --collapsed-safe-bottom: 90px; /* ajusta 70–120 si quieres más/menos */
+
+      /* ✅ para estar encima del body::after */
+      z-index: 1;
     }
 
     #timeline-embed{
@@ -223,7 +246,7 @@
       height: 100%;
     }
 
-    /* ====== (NUEVO) evitar blancos en el área del story ====== */
+    /* ====== evitar blancos en el área del story ====== */
     #timeline-embed .tl-timeline,
     #timeline-embed .tl-storyslider,
     #timeline-embed .tl-storyslider .tl-slider-container{
@@ -243,17 +266,25 @@
       border: 0 !important;
     }
 
-    /* ✅ (NUEVO) que el story use TODO el alto cuando se oculta timenav */
+    /* ✅ que el story use TODO el alto cuando se oculta timenav */
     .timeline-wrap.is-collapsed #timeline-embed .tl-storyslider{
       bottom: 0 !important;
       height: 100% !important;
+    }
+
+    /* ✅ “colchón” scrollable al final (para que el contenido suba y quede la franja) */
+    .timeline-wrap.is-collapsed #timeline-embed .tl-slide .tl-slide-scrollable-container,
+    .timeline-wrap.is-collapsed #timeline-embed .tl-slide .tl-slide-content-container,
+    .timeline-wrap.is-collapsed #timeline-embed .tl-slide .tl-text-content{
+      padding-bottom: var(--collapsed-safe-bottom) !important;
+      box-sizing: border-box;
     }
 
     /* Botón: siempre ARRIBA de la barra de fechas */
     .timeline-toggle{
       position:absolute;
       right: 14px;
-      bottom: var(--toggle-bottom, 130px); /* default para que desde el inicio esté arriba */
+      bottom: var(--toggle-bottom, 130px);
       z-index: 99999;
       background: rgba(0,0,0,.18);
       border: 1px solid rgba(255,255,255,.45);
@@ -267,18 +298,18 @@
       cursor:pointer;
       backdrop-filter: blur(4px);
     }
-    .timeline-toggle:hover{ 
-      background: rgba(0,0,0,.28); 
+    .timeline-toggle:hover{
+      background: rgba(0,0,0,.28);
       cursor: pointer !important;
     }
 
     #toggle-timeline,
-#toggle-timeline:hover,
-#toggle-timeline:active,
-#toggle-timeline:focus,
-#toggle-timeline *{
-  cursor: pointer !important;
-}
+    #toggle-timeline:hover,
+    #toggle-timeline:active,
+    #toggle-timeline:focus,
+    #toggle-timeline *{
+      cursor: pointer !important;
+    }
   </style>
 </head>
 
@@ -319,20 +350,15 @@
     const wrap = document.getElementById('timeline-wrap');
     const btn  = document.getElementById('toggle-timeline');
 
-    // Forzar recálculo fuerte (TimelineJS a veces necesita 2 pasadas)
     function refreshTimelineHard(){
       requestAnimationFrame(() => {
-        // reflow
         void wrap.offsetHeight;
         window.timeline?.updateDisplay?.();
-        // segunda pasada
         setTimeout(() => window.timeline?.updateDisplay?.(), 60);
       });
     }
 
-    // Pone el botón justo arriba de la barra de fechas (timenav)
     function updateToggleOffset(){
-      // Si está colapsado (sin timenav), botón abajo
       if (wrap.classList.contains('is-collapsed')) {
         wrap.style.setProperty('--toggle-bottom', '10px');
         return true;
@@ -349,10 +375,9 @@
       return true;
     }
 
-    // Asegurar desde el PRIMER render que el botón quede arriba
     (function ensureFirstCorrectButtonPosition(){
       let tries = 0;
-      const maxTries = 240; // ~4s
+      const maxTries = 240;
 
       const tick = () => {
         tries++;
@@ -363,7 +388,6 @@
       requestAnimationFrame(tick);
     })();
 
-    // Observer por si TimelineJS re-renderiza el DOM
     const embed = document.getElementById('timeline-embed');
     const mo = new MutationObserver(() => updateToggleOffset());
     mo.observe(embed, { childList: true, subtree: true });
