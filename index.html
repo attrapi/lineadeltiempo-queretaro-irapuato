@@ -17,7 +17,7 @@
       --color-institucional-sec: #96606f;  /* derivado que combine */
       --color-link: #96606f;               /* color de links en texto */
 
-      /* ✅ NUEVO: alto de la franja guinda visible abajo */
+      /* ✅ alto de la franja guinda visible abajo */
       --franja-guinda: 70px; /* ajusta 40–120px */
     }
 
@@ -96,7 +96,7 @@
       padding: 0;
     }
 
-    /* ✅ NUEVO (recomendado): “pinta” fijo el fondo guinda abajo */
+    /* ✅ “pinta” fijo el fondo guinda abajo (PERO ATRÁS para NO TAPAR FECHAS) */
     body::after{
       content:"";
       position: fixed;
@@ -104,7 +104,7 @@
       height: var(--franja-guinda);
       background: #691C32;
       pointer-events: none;
-      z-index: 0;
+      z-index: -1; /* ✅ CLAVE */
     }
 
     /* Poner el caption arriba de la foto */
@@ -226,24 +226,23 @@
     /* ===== Contenedor timeline ===== */
     .timeline-wrap{
       width: 100%;
-
-      /* ✅ CAMBIO CLAVE: levanta TODO el timeline para dejar franja guinda abajo */
       height: calc(100vh - var(--franja-guinda));
-
       min-height: 650px;
       overflow: hidden;
       position: relative;
-
-      /* ✅ NUEVO: altura de la “franja” guinda al final cuando está colapsado */
       --collapsed-safe-bottom: 90px; /* ajusta 70–120 si quieres más/menos */
-
-      /* ✅ para estar encima del body::after */
       z-index: 1;
+    }
+
+    /* ✅ NUEVO: al cargar, Timeline se renderiza pero NO se ve (evita flash y evita bug de tamaños) */
+    .timeline-wrap.is-prehide #timeline-embed{
+      opacity: 0;
     }
 
     #timeline-embed{
       width: 100%;
       height: 100%;
+      transition: opacity .12s ease;
     }
 
     /* ====== evitar blancos en el área del story ====== */
@@ -310,15 +309,48 @@
     #toggle-timeline *{
       cursor: pointer !important;
     }
+
+    /* ✅ Ocultar el badge/credit de TimelineJS (logo + link) */
+#timeline-embed .tl-credit,
+#timeline-embed .tl-attribution,
+#timeline-embed .tl-attribution a,
+#timeline-embed .tl-attribution .tl-logo,
+#timeline-embed a.tl-logo,
+#timeline-embed a.tl-credit,
+.tl-credit,
+.tl-attribution{
+  display: none !important;
+}
+
+/* ✅ Evita el “brinco” del botón al cargar */
+.timeline-wrap.is-prehide{
+  --toggle-bottom: 10px; /* desde el inicio, ya queda abajo */
+}
+
+/* ✅ No muestres el botón mientras TimelineJS termina de medir */
+.timeline-wrap.is-prehide .timeline-toggle{
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transform: translateY(10px);
+  transition: opacity .15s ease, transform .15s ease;
+}
+
+/* ✅ Cuando ya cargó (al quitar is-prehide), aparece limpio */
+.timeline-wrap .timeline-toggle{
+  transition: opacity .15s ease, transform .15s ease;
+}
+
+
   </style>
 </head>
 
 <body>
-  <div id="timeline-wrap" class="timeline-wrap">
+  <!-- ✅ Arranca “prehide” (invisible) y el botón ya dice MOSTRAR -->
+  <div id="timeline-wrap" class="timeline-wrap is-prehide">
     <div id="timeline-embed"></div>
 
-    <button id="toggle-timeline" class="timeline-toggle" type="button" aria-expanded="true">
-      OCULTAR
+    <button id="toggle-timeline" class="timeline-toggle" type="button" aria-expanded="false">
+      Mostrar Cronología
     </button>
   </div>
 
@@ -355,6 +387,7 @@
         void wrap.offsetHeight;
         window.timeline?.updateDisplay?.();
         setTimeout(() => window.timeline?.updateDisplay?.(), 60);
+        setTimeout(() => window.timeline?.updateDisplay?.(), 220); /* extra por si acaso */
       });
     }
 
@@ -392,12 +425,45 @@
     const mo = new MutationObserver(() => updateToggleOffset());
     mo.observe(embed, { childList: true, subtree: true });
 
+    // ✅ NUEVO: esperar a que exista la barra (.tl-timenav) y luego arrancar colapsado (sin romper tamaños)
+    (function startCollapsedAfterReady(){
+      let tries = 0;
+      const maxTries = 240;    
+      const tick = () => {
+        tries++;
+
+        const nav = document.querySelector('#timeline-embed .tl-timenav');
+        const ok = nav && nav.getBoundingClientRect().height > 0;
+
+        if (ok) {
+          wrap.classList.add('is-collapsed');// arranca oculto
+          wrap.classList.remove('is-prehide');// ya se puede ver
+          btn.textContent = 'Mostrar Cronología';
+          btn.setAttribute('aria-expanded', 'false');
+          wrap.style.setProperty('--toggle-bottom', '10px');
+          refreshTimelineHard();
+          return;
+        }
+
+        if (tries >= maxTries) {
+          // si por algo no detecta, al menos quita prehide para que se vea
+          wrap.classList.remove('is-prehide');
+          refreshTimelineHard();
+          return;
+        }
+
+        requestAnimationFrame(tick);
+      };
+
+      requestAnimationFrame(tick);
+    })();
+
     btn.addEventListener('click', () => {
       const willCollapse = !wrap.classList.contains('is-collapsed');
       wrap.classList.toggle('is-collapsed', willCollapse);
 
       if (willCollapse) {
-        btn.textContent = 'MOSTRAR COMPLETO';
+        btn.textContent = 'Mostrar Cronología';
         btn.setAttribute('aria-expanded', 'false');
         wrap.style.setProperty('--toggle-bottom', '10px');
       } else {
