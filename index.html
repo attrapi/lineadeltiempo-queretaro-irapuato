@@ -267,7 +267,18 @@
       cursor:pointer;
       backdrop-filter: blur(4px);
     }
-    .timeline-toggle:hover{ background: rgba(0,0,0,.28); }
+    .timeline-toggle:hover{ 
+      background: rgba(0,0,0,.28); 
+      cursor: pointer !important;
+    }
+
+    #toggle-timeline,
+#toggle-timeline:hover,
+#toggle-timeline:active,
+#toggle-timeline:focus,
+#toggle-timeline *{
+  cursor: pointer !important;
+}
   </style>
 </head>
 
