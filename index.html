@@ -4,6 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="icon" type="image/png" href="favicon-tren-691C32-32.png" sizes="32x32">
+  <link rel="alternate" type="application/rss+xml" title="DOF - Sumario" href="URL_DEL_RSS">
   <title>Timeline ARTF</title>
 
   <!-- CSS oficial de TimelineJS -->
@@ -11,103 +12,107 @@
         href="https://cdn.knightlab.com/libs/timeline3/latest/css/timeline.css">
 
   <style>
-    :root {
-      /* Colores institucionales EXACTOS */
-      --color-institucional: #691c32;      /* vino principal */
-      --color-institucional-sec: #96606f;  /* derivado que combine */
-      --color-link: #96606f;               /* color de links en texto */
+    :root{
+      /* Colores institucionales */
+      --color-institucional:#691c32;      /* vino */
+      --color-institucional-sec:#96606f;  /* derivado */
+      --color-link:#96606f;
 
-      /* ✅ alto de la franja guinda visible abajo */
-      --franja-guinda: 70px; /* ajusta 40–120px */
+      /* franja guinda inferior */
+      --franja-guinda:70px;
+
+      /* TABLAS PRO */
+      --t-line: rgba(255,255,255,.22);
+      --t-line-strong: rgba(255,255,255,.45);
+      --t-bg: rgba(255,255,255,.05);
+      --t-bg-2: rgba(0,0,0,.12);
+      --t-bg-3: rgba(255,255,255,.03);
+      --t-txt:#fff;
+      --t-txt-2: rgba(255,255,255,.88);
+      --t-radius:14px;
     }
 
     /* ========= CUADROS DE EVENTOS (TIMENAV) ========= */
     .tl-timemarker-content-container,
     .tl-timemarker-content-container-long,
-    .tl-timemarker-content-container-small {
+    .tl-timemarker-content-container-small{
       background-color: var(--color-institucional);
-      color: #ffffff;
-      border-radius: 4px;
-      border: 1px solid rgba(0,0,0,0.15);
+      color:#fff;
+      border-radius:4px;
+      border:1px solid rgba(0,0,0,0.15);
     }
-
-    /* EVENTOS QUE TIENEN RANGO (with-end) */
     .tl-timemarker.tl-timemarker-with-end
       .tl-timemarker-content-container,
     .tl-timemarker.tl-timemarker-with-end
       .tl-timemarker-content-container-long,
     .tl-timemarker.tl-timemarker-with-end
-      .tl-timemarker-content-container-small {
+      .tl-timemarker-content-container-small{
       background-color: var(--color-institucional-sec);
     }
 
-    /* ========= LINKS DENTRO DEL TEXTO DE LAS DIAPOSITIVAS ========= */
-    .tl-slide .tl-text-content a {
+    /* ========= LINKS EN TEXTO ========= */
+    .tl-text-content{
+      margin-top: 60px;
+    }
+    .tl-slide .tl-text-content a{
       color: var(--color-link);
-      text-decoration: none;
-      font-weight: 600;
-      border-bottom: 1px dashed var(--color-link);
+      text-decoration:none;
+      font-weight:600;
+      border-bottom:1px dashed var(--color-link);
     }
-    .tl-slide .tl-text-content a:hover {
-      text-decoration: underline;
-    }
+    .tl-slide .tl-text-content a:hover{ text-decoration:underline; }
 
-    /* ========= ACORDEONES (LISTAS DESPLEGABLES) ========= */
-    .tl-slide .tl-text-content .accordion {
-      margin: 0.4em 0 0.6em 0;
-    }
-    .tl-slide .tl-text-content .accordion-summary {
-      cursor: pointer;
-      font-weight: 600;
-      padding: 0.25em 0.6em;
-      border-radius: 4px;
-      display: inline-block;
+    /* ========= ACORDEONES ========= */
+    .tl-slide .tl-text-content .accordion{ margin: .4em 0 .6em 0; }
+    .tl-slide .tl-text-content .accordion-summary{
+      cursor:pointer;
+      font-weight:600;
+      padding:.25em .6em;
+      border-radius:4px;
+      display:inline-block;
       background: var(--color-institucional-sec);
-      color: #ffffff;
-      user-select: none;
+      color:#fff;
+      user-select:none;
     }
-    .tl-slide .tl-text-content .accordion-body {
-      max-height: 0;
-      overflow: hidden;
-      opacity: 0;
+    .tl-slide .tl-text-content .accordion-body{
+      max-height:0;
+      overflow:hidden;
+      opacity:0;
       transform: translateY(-4px);
-      transition:
-        max-height 0.35s ease,
-        opacity 0.35s ease,
-        transform 0.35s ease;
-      margin-top: 0.25em;
+      transition: max-height .35s ease, opacity .35s ease, transform .35s ease;
+      margin-top:.25em;
     }
-    .tl-slide .tl-text-content .accordion.is-open .accordion-body {
-      max-height: 500px;
-      opacity: 1;
+    .tl-slide .tl-text-content .accordion.is-open .accordion-body{
+      max-height:500px;
+      opacity:1;
       transform: translateY(0);
     }
-    .tl-slide .tl-text-content .accordion-body ul {
-      margin: 0.3em 0 0 1.2em;
-      padding-left: 0;
+    .tl-slide .tl-text-content .accordion-body ul{
+      margin:.3em 0 0 1.2em;
+      padding-left:0;
     }
 
-    .tl-credit{ display:none; }
-    .tl-timeline h2.tl-headline-title { white-space: nowrap; }
-
-    html, body {
-      background-color: #691C32;
-      margin: 0;
-      padding: 0;
+    /* ========= BASE ========= */
+    html, body{
+      background:#691C32;
+      margin:0;
+      padding:0;
     }
 
-    /* ✅ “pinta” fijo el fondo guinda abajo (PERO ATRÁS para NO TAPAR FECHAS) */
+    /* franja guinda fija abajo (atrás) */
     body::after{
       content:"";
-      position: fixed;
-      left: 0; right: 0; bottom: 0;
+      position:fixed;
+      left:0; right:0; bottom:0;
       height: var(--franja-guinda);
-      background: #691C32;
-      pointer-events: none;
-      z-index: -1; /* ✅ CLAVE */
+      background:#691C32;
+      pointer-events:none;
+      z-index:-1;
     }
 
-    /* Poner el caption arriba de la foto */
+    .tl-timeline h2.tl-headline-title{ white-space:nowrap; }
+
+    /* caption arriba de la foto */
     .tl-media .tl-caption{
       position:absolute;
       top:0; left:0; right:0;
@@ -119,84 +124,104 @@
       text-transform:uppercase;
       z-index:20;
     }
-
-    /* Para que no tape la imagen */
+    /* para que el caption no tape imagen */
     .tl-media .tl-media-content{ padding-top:52px; }
 
-    .titulo-foto{ font-size: x-large; margin-top: 20px; }
+    /*.titulo-foto{ font-size:x-large; margin-top:20px; }*/
+    .titulo-foto{
+  
+  max-width: 100%;
+  padding: 10px 14px;
+  margin: 10px 0 14px;
+  font-size: large;
 
-    /* Fondo detrás de la imagen (quita negro) */
+  /* look institucional limpio */
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.22);
+  background: rgba(0,0,0,.12);
+
+  color: #fff;
+  font-weight: 900;
+  letter-spacing: .8px;
+  text-transform: uppercase;
+  line-height: 1.1;
+
+  /* ✅ mata cualquier “línea/sombra” */
+  box-shadow: none !important;
+  outline: none !important;
+  filter: none !important;
+  text-shadow: none !important;
+}
+
+
+
+    /* fondo guinda detrás de la imagen (quita negro) */
     #timeline-embed .tl-media,
     #timeline-embed .tl-media-content-container,
     #timeline-embed .tl-media-content,
     #timeline-embed .tl-media-wrapper,
-    #timeline-embed .tl-slide-content-container {
-      background: #691C32 !important;
+    #timeline-embed .tl-slide-content-container{
+      background:#691C32 !important;
     }
     #timeline-embed .tl-media .tl-caption{
-      width: 500px !important;
+      width:500px !important;
       max-width: calc(100% - 24px) !important;
-      margin-top: 12px;
+      margin-top:8px;
     }
 
-    /* Ocultar iconitos en los time markers (nav) */
+    /* oculta iconitos en timemarkers */
     #timeline-embed .tl-timemarker-media-container [class^="tl-icon-"],
     #timeline-embed .tl-timemarker-media-container [class*=" tl-icon-"]{
-      display: none !important;
+      display:none !important;
     }
 
-    /* Tarjeta Director */
+    /* tarjetas */
     #timeline-embed .tl-slide .tl-text-content .role-card{
-      margin: 10px 0;
-      padding: 10px 12px;
-      border-radius: 6px;
-      border: 1px solid rgba(255,255,255,.22);
-      border-left: 4px solid var(--color-institucional-sec);
+      margin:10px 0;
+      padding:10px 12px;
+      border-radius:6px;
+      border:1px solid rgba(255,255,255,.22);
+      border-left:4px solid var(--color-institucional-sec);
       background: rgba(255,255,255,.06);
     }
     #timeline-embed .tl-slide .tl-text-content .role-title{
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: .5px;
-      text-transform: uppercase;
-      opacity: .95;
-      margin-bottom: 4px;
+      font-size:12px;
+      font-weight:700;
+      letter-spacing:.5px;
+      text-transform:uppercase;
+      opacity:.95;
+      margin-bottom:4px;
     }
     #timeline-embed .tl-slide .tl-text-content .role-name{
-      font-size: 16px;
-      font-weight: 700;
-      line-height: 1.1;
+      font-size:16px;
+      font-weight:700;
+      line-height:1.1;
     }
 
-    /* Por si quedan listas, quita viñetas dentro del slide */
+    /* quita viñetas dentro del slide */
     #timeline-embed .tl-slide .tl-text-content ul{
-      list-style: none;
-      padding-left: 0;
-      margin-left: 0;
+      list-style:none;
+      padding-left:0;
+      margin-left:0;
     }
 
-    /* Tarjetas de residentes */
+    /* resident cards */
     #timeline-embed .tl-slide .tl-text-content .resident-card{
-      margin: 12px 0;
-      padding: 10px 10px;
-      border-radius: 10px;
-      border: 1px solid rgba(255,255,255,.18);
+      margin:14px 0;
+      padding:10px 10px;
+      border-radius:10px;
+      border:1px solid rgba(255,255,255,.18);
       background: rgba(255,255,255,.05);
     }
     #timeline-embed .tl-slide .tl-text-content .resident-card hr{
-      border: 0;
-      border-top: 1px solid rgba(255,255,255,.18);
-      margin: 10px 0;
+      border:0;
+      border-top:1px solid rgba(255,255,255,.18);
+      margin:10px 0;
     }
-    #timeline-embed .tl-slide .tl-text-content .resident-card td{
-      line-height: 1.25;
-    }
-    #timeline-embed .tl-slide .tl-text-content .resident-card{
-      margin: 14px 0;
-    }
+    #timeline-embed .tl-slide .tl-text-content .resident-card td{ line-height:1.25; }
     #timeline-embed .tl-slide .tl-text-content .resident-card + .resident-card{
-      position: relative;
-      padding-top: 14px;
+      position:relative;
+      padding-top:14px;
     }
     #timeline-embed .tl-slide .tl-text-content .resident-card + .resident-card:before{
       content:"";
@@ -206,12 +231,11 @@
       background: rgba(255,255,255,.18);
     }
 
-    /*Dividers*/
+    /* dividers */
     #timeline-embed .tl-slide .tl-text-content .divider{
-      height: 1px;
-      margin: 14px 0;
-      background: linear-gradient(
-        90deg,
+      height:1px;
+      margin:14px 0;
+      background: linear-gradient(90deg,
         rgba(255,255,255,0),
         rgba(255,255,255,.28),
         rgba(255,255,255,0)
@@ -220,132 +244,272 @@
 
     /* SOLO para la diapositiva marcada como .slide-2 */
     #timeline-embed .tl-slide:has(.slide-2) .tl-media .tl-media-content{
-      padding-top: 1px !important;
+      padding-top:1px !important;
     }
 
     /* ===== Contenedor timeline ===== */
     .timeline-wrap{
-      width: 100%;
+      width:100%;
       height: calc(100vh - var(--franja-guinda));
-      min-height: 650px;
-      overflow: hidden;
-      position: relative;
-      --collapsed-safe-bottom: 90px; /* ajusta 70–120 si quieres más/menos */
-      z-index: 1;
+      min-height:650px;
+      overflow:hidden;
+      position:relative;
+      --collapsed-safe-bottom:90px;
+      --toggle-bottom:130px;
+      z-index:1;
     }
 
-    /* ✅ NUEVO: al cargar, Timeline se renderiza pero NO se ve (evita flash y evita bug de tamaños) */
-    .timeline-wrap.is-prehide #timeline-embed{
-      opacity: 0;
-    }
+    .timeline-wrap.is-prehide #timeline-embed{ opacity:0; }
 
     #timeline-embed{
-      width: 100%;
-      height: 100%;
+      width:100%;
+      height:100%;
       transition: opacity .12s ease;
     }
 
-    /* ====== evitar blancos en el área del story ====== */
     #timeline-embed .tl-timeline,
     #timeline-embed .tl-storyslider,
     #timeline-embed .tl-storyslider .tl-slider-container{
-      background: #691C32 !important;
+      background:#691C32 !important;
     }
 
-    /* ✅ OCULTAR SOLO el bloque inferior completo (timenav + wrappers) */
+    /* colapsar timenav */
     .timeline-wrap.is-collapsed #timeline-embed .tl-timenav,
     .timeline-wrap.is-collapsed #timeline-embed .tl-timenav-wrapper,
     .timeline-wrap.is-collapsed #timeline-embed .tl-timenav-container,
     .timeline-wrap.is-collapsed #timeline-embed .tl-menubar{
-      display: none !important;
-      height: 0 !important;
-      min-height: 0 !important;
-      margin: 0 !important;
-      padding: 0 !important;
-      border: 0 !important;
+      display:none !important;
+      height:0 !important;
+      min-height:0 !important;
+      margin:0 !important;
+      padding:0 !important;
+      border:0 !important;
     }
-
-    /* ✅ que el story use TODO el alto cuando se oculta timenav */
     .timeline-wrap.is-collapsed #timeline-embed .tl-storyslider{
-      bottom: 0 !important;
-      height: 100% !important;
+      bottom:0 !important;
+      height:100% !important;
     }
-
-    /* ✅ “colchón” scrollable al final (para que el contenido suba y quede la franja) */
     .timeline-wrap.is-collapsed #timeline-embed .tl-slide .tl-slide-scrollable-container,
     .timeline-wrap.is-collapsed #timeline-embed .tl-slide .tl-slide-content-container,
     .timeline-wrap.is-collapsed #timeline-embed .tl-slide .tl-text-content{
-      padding-bottom: var(--collapsed-safe-bottom) !important;
-      box-sizing: border-box;
+      
+      box-sizing:border-box;
     }
 
-    /* Botón: siempre ARRIBA de la barra de fechas */
+    /* botón */
     .timeline-toggle{
       position:absolute;
-      right: 14px;
-      bottom: var(--toggle-bottom, 130px);
-      z-index: 99999;
+      right:14px;
+      bottom: var(--toggle-bottom);
+      z-index:99999;
       background: rgba(0,0,0,.18);
-      border: 1px solid rgba(255,255,255,.45);
+      border:1px solid rgba(255,255,255,.45);
       color:#fff;
-      border-radius: 10px;
-      padding: 8px 12px;
-      font-size: 12px;
-      font-weight: 900;
-      letter-spacing: .8px;
-      text-transform: uppercase;
+      border-radius:10px;
+      padding:8px 12px;
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.8px;
+      text-transform:uppercase;
       cursor:pointer;
       backdrop-filter: blur(4px);
     }
-    .timeline-toggle:hover{
-      background: rgba(0,0,0,.28);
-      cursor: pointer !important;
-    }
+    .timeline-toggle:hover{ background: rgba(0,0,0,.28); cursor:pointer !important; }
 
     #toggle-timeline,
     #toggle-timeline:hover,
     #toggle-timeline:active,
     #toggle-timeline:focus,
-    #toggle-timeline *{
-      cursor: pointer !important;
+    #toggle-timeline *{ cursor:pointer !important; }
+
+    /* Ocultar branding timeline */
+    #timeline-embed .tl-credit,
+    #timeline-embed .tl-attribution,
+    #timeline-embed .tl-attribution a,
+    #timeline-embed .tl-attribution .tl-logo,
+    #timeline-embed a.tl-logo,
+    #timeline-embed a.tl-credit,
+    .tl-credit,
+    .tl-attribution{
+      display:none !important;
     }
 
-    /* ✅ Ocultar el badge/credit de TimelineJS (logo + link) */
-#timeline-embed .tl-credit,
-#timeline-embed .tl-attribution,
-#timeline-embed .tl-attribution a,
-#timeline-embed .tl-attribution .tl-logo,
-#timeline-embed a.tl-logo,
-#timeline-embed a.tl-credit,
-.tl-credit,
-.tl-attribution{
-  display: none !important;
-}
+    /* evita brinco al cargar */
+    .timeline-wrap.is-prehide{ --toggle-bottom:10px; }
+    .timeline-wrap.is-prehide .timeline-toggle{
+      opacity:0 !important;
+      pointer-events:none !important;
+      transform: translateY(10px);
+      transition: opacity .15s ease, transform .15s ease;
+    }
+    .timeline-wrap .timeline-toggle{
+      transition: opacity .15s ease, transform .15s ease;
+    }
 
-/* ✅ Evita el “brinco” del botón al cargar */
-.timeline-wrap.is-prehide{
-  --toggle-bottom: 10px; /* desde el inicio, ya queda abajo */
-}
+    .tl-headline, .tl-headline-date{ display:none; }
+    .tl-text-content-container{ margin-top:-30px; }
 
-/* ✅ No muestres el botón mientras TimelineJS termina de medir */
-.timeline-wrap.is-prehide .timeline-toggle{
-  opacity: 0 !important;
-  pointer-events: none !important;
-  transform: translateY(10px);
-  transition: opacity .15s ease, transform .15s ease;
-}
+    /* =========================================================
+       TABLA CONTRATO + AVANCE (ÚNICO BLOQUE BUENO)
+       ========================================================= */
 
-/* ✅ Cuando ya cargó (al quitar is-prehide), aparece limpio */
-.timeline-wrap .timeline-toggle{
-  transition: opacity .15s ease, transform .15s ease;
-}
+    #timeline-embed .tl-slide .tl-text-content .tabla-contrato{
+      width:100% !important;
+      border-collapse: collapse !important;
+      table-layout: fixed;
+      color: var(--t-txt);
+      border:1px solid var(--t-line-strong) !important;
+      border-radius: var(--t-radius);
+      overflow:hidden;
+      background: var(--t-bg);
+      box-shadow:
+        0 18px 40px rgba(0,0,0,.35),
+        0 2px 0 rgba(255,255,255,.06) inset;
+    }
 
+    #timeline-embed .tl-slide .tl-text-content .tabla-contrato th,
+    #timeline-embed .tl-slide .tl-text-content .tabla-contrato td{
+      padding:16px 14px;
+      border-bottom:1px solid var(--t-line) !important;
+      border-right:1px solid var(--t-line) !important;
+      vertical-align:middle;
+      line-height:1.25;
+    }
+
+    #timeline-embed .tl-slide .tl-text-content .tabla-contrato th:last-child,
+    #timeline-embed .tl-slide .tl-text-content .tabla-contrato td:last-child{
+      border-right:none !important;
+    }
+
+    #timeline-embed .tl-slide .tl-text-content .tabla-contrato tr:last-child th,
+    #timeline-embed .tl-slide .tl-text-content .tabla-contrato tr:last-child td{
+      border-bottom:none !important;
+    }
+
+    /* labels izquierda (Contrato/Residente/Supervisión) */
+    #timeline-embed .tl-slide .tl-text-content .tabla-contrato > tbody > tr > th{
+      width:34%;
+      text-align:left;
+      font-weight:900;
+      background: linear-gradient(180deg, rgba(0,0,0,.16), rgba(0,0,0,.06));
+    }
+
+    /* valores */
+    #timeline-embed .tl-slide .tl-text-content .tabla-contrato td.valor{
+      color: var(--t-txt-2);
+      font-weight:700;
+    }
+
+    /* placeholders */
+    #timeline-embed .tl-slide .tl-text-content .tabla-contrato .placeholder{
+      display:inline-block;
+      padding:8px 10px;
+      border-radius:10px;
+      background: rgba(255,255,255,.07);
+      border:1px dashed rgba(255,255,255,.28);
+      color: rgba(255,255,255,.82);
+      letter-spacing:.1px;
+    }
+
+    /* td que contiene la tabla interna */
+    #timeline-embed .tl-slide .tl-text-content .tabla-contrato td[colspan="2"]{
+      padding:0 !important;
+      border-right:none !important;
+    }
+
+    /* tabla interna sin doble card */
+    #timeline-embed .tl-slide .tl-text-content .tabla-contrato td[colspan="2"] > .tabla-contrato{
+      border:none !important;
+      border-radius:0 !important;
+      box-shadow:none !important;
+      background:transparent !important;
+    }
+
+    /* ===== tabla-avance (subtabla) ===== */
+    #timeline-embed .tl-slide .tl-text-content .tabla-avance{
+      table-layout: fixed;
+    }
+
+    /* fila 1 (Plazo/Importe/Avance) */
+    #timeline-embed .tl-slide .tl-text-content .tabla-avance tr:first-child th{
+      background: var(--t-bg-2);
+      font-weight:900;
+      letter-spacing:.4px;
+      padding:12px 10px;
+    }
+    /* separadores fuertes en la fila de grupos (por colspans) */
+    #timeline-embed .tl-slide .tl-text-content .tabla-avance tr:first-child th:nth-child(1),
+    #timeline-embed .tl-slide .tl-text-content .tabla-avance tr:first-child th:nth-child(2){
+      border-right:2px solid var(--t-line-strong) !important; /* fin Plazo y fin Importe */
+    }
+
+    /* fila 2 (Inicio/Fin/...) -> evita encimarse */
+    #timeline-embed .tl-slide .tl-text-content .tabla-avance tr:nth-child(2) th{
+      background: rgba(255,255,255,.04);
+      font-weight:800;
+      font-size:13px;
+      padding:10px 6px;
+      white-space: normal !important;
+      overflow-wrap:anywhere;
+      word-break:break-word;
+      hyphens:auto;
+      line-height:1.1;
+      text-align:center;
+    }
+
+    /* valores internos */
+    #timeline-embed .tl-slide .tl-text-content .tabla-avance td{
+      background: var(--t-bg-3);
+      padding:10px 6px;
+      text-align:center;
+    }
+
+    /* separadores fuertes entre grupos en filas con 7 columnas */
+    #timeline-embed .tl-slide .tl-text-content .tabla-avance tr:nth-child(2) th:nth-child(2),
+    #timeline-embed .tl-slide .tl-text-content .tabla-avance tr:nth-child(3) td:nth-child(2){
+      border-right:2px solid var(--t-line-strong) !important; /* fin Plazo */
+    }
+    #timeline-embed .tl-slide .tl-text-content .tabla-avance tr:nth-child(2) th:nth-child(4),
+    #timeline-embed .tl-slide .tl-text-content .tabla-avance tr:nth-child(3) td:nth-child(4){
+      border-right:2px solid var(--t-line-strong) !important; /* fin Importe */
+    }
+
+    /* hover suave */
+    @media (hover:hover){
+      #timeline-embed .tl-slide .tl-text-content .tabla-contrato > tbody > tr:hover > th,
+      #timeline-embed .tl-slide .tl-text-content .tabla-contrato > tbody > tr:hover > td{
+        background: rgba(255,255,255,.035);
+      }
+    }
+
+    /* ===== Título tipo “tarjeta” (moderno, institucional) ===== */
+#timeline-embed .tl-slide .tl-text-content .titulo-foto{
+  display: inline-block;
+  margin: 10px 0 14px;
+  padding: 10px 14px;
+
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.35);
+  background: rgba(255,255,255,.06);
+
+  color: #fff;
+  font-weight: 900;
+  letter-spacing: .8px;
+  text-transform: uppercase;
+  line-height: 1.1;
+
+  box-shadow:
+    0 14px 30px rgba(0,0,0,.30),
+    0 2px 0 rgba(255,255,255,.06) inset;
+
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
 
   </style>
 </head>
 
 <body>
-  <!-- ✅ Arranca “prehide” (invisible) y el botón ya dice MOSTRAR -->
   <div id="timeline-wrap" class="timeline-wrap is-prehide">
     <div id="timeline-embed"></div>
 
@@ -357,25 +521,21 @@
   <!-- JS de TimelineJS -->
   <script src="https://cdn.knightlab.com/libs/timeline3/latest/js/timeline.js"></script>
   <script>
-    // Tu "source"
     var source = "v2:2PACX-1vTrhzy-gOn-UThOEccNA7-5ijY_ln-13xyFrHTlreZAJ0aGprAysbyfkzcWrr94FcZoDQTi3zowxELi";
 
-    // Crear timeline
     window.timeline = new TL.Timeline("timeline-embed", source, {
       language: "es",
       initial_zoom: 0,
       font: "Default"
     });
 
-    // ========= Acordeón =========
+    // acordeón
     document.addEventListener('click', function (e) {
       const summary = e.target.closest('.accordion-summary');
       if (!summary) return;
       if (e.target.tagName === 'A') return;
-
       const accordion = summary.closest('.accordion');
       if (!accordion) return;
-
       accordion.classList.toggle('is-open');
     });
 
@@ -387,7 +547,7 @@
         void wrap.offsetHeight;
         window.timeline?.updateDisplay?.();
         setTimeout(() => window.timeline?.updateDisplay?.(), 60);
-        setTimeout(() => window.timeline?.updateDisplay?.(), 220); /* extra por si acaso */
+        setTimeout(() => window.timeline?.updateDisplay?.(), 220);
       });
     }
 
@@ -396,14 +556,11 @@
         wrap.style.setProperty('--toggle-bottom', '10px');
         return true;
       }
-
       const nav = document.querySelector('#timeline-embed .tl-timenav');
       const gap = 10;
       if (!nav) return false;
-
       const navH = Math.ceil(nav.getBoundingClientRect().height);
       if (navH <= 0) return false;
-
       wrap.style.setProperty('--toggle-bottom', (navH + gap) + 'px');
       return true;
     }
@@ -411,7 +568,6 @@
     (function ensureFirstCorrectButtonPosition(){
       let tries = 0;
       const maxTries = 240;
-
       const tick = () => {
         tries++;
         const ok = updateToggleOffset();
@@ -425,19 +581,17 @@
     const mo = new MutationObserver(() => updateToggleOffset());
     mo.observe(embed, { childList: true, subtree: true });
 
-    // ✅ NUEVO: esperar a que exista la barra (.tl-timenav) y luego arrancar colapsado (sin romper tamaños)
     (function startCollapsedAfterReady(){
       let tries = 0;
-      const maxTries = 240;    
+      const maxTries = 240;
       const tick = () => {
         tries++;
-
         const nav = document.querySelector('#timeline-embed .tl-timenav');
         const ok = nav && nav.getBoundingClientRect().height > 0;
 
         if (ok) {
-          wrap.classList.add('is-collapsed');// arranca oculto
-          wrap.classList.remove('is-prehide');// ya se puede ver
+          wrap.classList.add('is-collapsed');
+          wrap.classList.remove('is-prehide');
           btn.textContent = 'Mostrar Cronología';
           btn.setAttribute('aria-expanded', 'false');
           wrap.style.setProperty('--toggle-bottom', '10px');
@@ -446,7 +600,6 @@
         }
 
         if (tries >= maxTries) {
-          // si por algo no detecta, al menos quita prehide para que se vea
           wrap.classList.remove('is-prehide');
           refreshTimelineHard();
           return;
@@ -454,7 +607,6 @@
 
         requestAnimationFrame(tick);
       };
-
       requestAnimationFrame(tick);
     })();
 
@@ -471,7 +623,6 @@
         btn.setAttribute('aria-expanded', 'true');
         updateToggleOffset();
       }
-
       refreshTimelineHard();
     });
 
