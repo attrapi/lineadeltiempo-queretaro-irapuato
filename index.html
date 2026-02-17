@@ -567,6 +567,20 @@
   }
     .pop-wrap{ position: relative; }
     .poplist{ margin:0; padding:0; }
+/* ✅ para que el popup NO se recorte por overflow:hidden del card */
+#timeline-embed .tl-slide .tl-text-content .tabla-contrato{
+  overflow: visible !important;
+}
+
+/* el TD que contiene botón + popup debe ser relativo */
+#timeline-embed .tl-slide .tl-text-content td.pop-wrap{
+  position: relative;
+}
+
+/* por si Timeline mete el td sin especificar td */
+#timeline-embed .tl-slide .tl-text-content .pop-wrap{
+  position: relative;
+}
 
   </style>
 </head>
@@ -694,43 +708,61 @@
     });
   </script>
   <script>
-  function closeAllPopovers(){
-    document.querySelectorAll('.js-popbox').forEach(p => p.hidden = true);
-    document.querySelectorAll('.js-popbtn').forEach(b => b.setAttribute('aria-expanded','false'));
-  }
+  // =========================================
+  // ✅ POPUP BOTÓN (TimelineJS / contenido de Sheets)
+  // Requiere en el HTML:
+  //   - botón o link: class="js-popbtn"
+  //   - popup: class="js-popbox" hidden
+  // =========================================
+  (function () {
 
-  document.addEventListener('click', function(e){
-    const btn = e.target.closest('.js-popbtn');
-    const pop = e.target.closest('.js-popbox');
-
-    // click dentro del cuadro: no cerrar
-    if (pop) return;
-
-    // click en botón: toggle
-    if (btn) {
-      const td = btn.closest('td');
-      const box = td.querySelector('.js-popbox');
-      const willOpen = box.hidden;
-
-      closeAllPopovers();
-      box.hidden = !willOpen;
-      btn.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
-
-      e.stopPropagation();
-      return;
+    function closeAllPopups() {
+      document.querySelectorAll('#timeline-embed .js-popbox').forEach(p => p.hidden = true);
+      document.querySelectorAll('#timeline-embed .js-popbtn').forEach(b => b.setAttribute('aria-expanded', 'false'));
     }
 
-    // click afuera: cerrar
-    closeAllPopovers();
-  }, true);
+    document.addEventListener('click', function (e) {
+      const btn = e.target.closest('#timeline-embed .js-popbtn');
+      const insideBox = e.target.closest('#timeline-embed .js-popbox');
 
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeAllPopovers();
-  });
+      // Click dentro del popup -> no cerrar
+      if (insideBox) return;
+
+      // Click en botón/link -> toggle
+      if (btn) {
+        const td = btn.closest('td');
+        const box = td ? td.querySelector('.js-popbox') : null;
+        if (!box) return;
+
+        const willOpen = box.hidden;
+        closeAllPopups();
+        box.hidden = !willOpen;
+        btn.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+
+        e.preventDefault();
+        e.stopPropagation();
+        return;
+      }
+
+      // Click afuera -> cerrar
+      closeAllPopups();
+    }, true);
+
+    // ESC -> cerrar
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeAllPopups();
+    });
+
+    // Scroll dentro de timeline -> cerrar
+    document.addEventListener('scroll', () => closeAllPopups(), true);
+
+  })();
 </script>
+
 
 </body>
 </html>
+
 
 
 
