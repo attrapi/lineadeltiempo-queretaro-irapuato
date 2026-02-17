@@ -693,8 +693,45 @@
       refreshTimelineHard();
     });
   </script>
+  <script>
+  function closeAllPopovers(){
+    document.querySelectorAll('.js-popbox').forEach(p => p.hidden = true);
+    document.querySelectorAll('.js-popbtn').forEach(b => b.setAttribute('aria-expanded','false'));
+  }
+
+  document.addEventListener('click', function(e){
+    const btn = e.target.closest('.js-popbtn');
+    const pop = e.target.closest('.js-popbox');
+
+    // click dentro del cuadro: no cerrar
+    if (pop) return;
+
+    // click en botón: toggle
+    if (btn) {
+      const td = btn.closest('td');
+      const box = td.querySelector('.js-popbox');
+      const willOpen = box.hidden;
+
+      closeAllPopovers();
+      box.hidden = !willOpen;
+      btn.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+
+      e.stopPropagation();
+      return;
+    }
+
+    // click afuera: cerrar
+    closeAllPopovers();
+  }, true);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeAllPopovers();
+  });
+</script>
+
 </body>
 </html>
+
 
 
 
