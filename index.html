@@ -746,6 +746,103 @@
 #timeline-embed .popbox .popsub > li a:hover{
   border-bottom-color: rgba(255,255,255,.70);
 }
+/* ====== Ajuste “blanco” a tono institucional (suave) ====== */
+:root{
+  --txt-soft: rgba(243,231,235,.92);  /* blanco con tinte rosita */
+  --txt-soft-2: rgba(243,231,235,.78);
+  --guinda: #691c32;
+  --guinda-2: #8b2a43;
+  --guinda-3: #541426;
+}
+
+/* Texto general dentro del popup */
+#timeline-embed .popbox,
+#timeline-embed .popbox *{
+  color: var(--txt-soft);
+}
+
+/* ====== Tarjetitas (subitems) con gradiente guinda ====== */
+#timeline-embed .popbox .popsub{
+  margin: 8px 0 0 0;
+  padding: 0;
+}
+
+#timeline-embed .popbox .popsub > li{
+  position: relative;
+  padding: 10px 12px 10px 14px;
+  border-radius: 12px;
+  margin: 8px 0 0;
+
+  /* ✅ Gradiente guinda + capa brillo */
+  background:
+    linear-gradient(135deg, rgba(255,255,255,.12), rgba(255,255,255,.03)),
+    linear-gradient(135deg, rgba(105,28,50,.92), rgba(139,42,67,.72), rgba(84,20,38,.78));
+
+  border: 1px solid rgba(255,255,255,.18);
+
+  font-size: 13px;
+  font-weight: 750;
+  line-height: 1.25;
+
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/* barra lateral para separar visualmente */
+#timeline-embed .popbox .popsub > li::before{
+  content:"";
+  position:absolute;
+  left: 8px;
+  top: 8px;
+  bottom: 8px;
+  width: 4px;
+  border-radius: 999px;
+
+  background: linear-gradient(180deg,
+    rgba(243,231,235,.75),
+    rgba(243,231,235,.18)
+  );
+  opacity: .95;
+}
+
+/* shine superior (look moderno) */
+#timeline-embed .popbox .popsub > li::after{
+  content:"";
+  position:absolute;
+  left: 12px;
+  right: 12px;
+  top: 7px;
+  height: 1px;
+  border-radius: 999px;
+  background: rgba(243,231,235,.18);
+  opacity: .75;
+}
+
+/* Hover sutil */
+@media (hover:hover){
+  #timeline-embed .popbox .popsub > li:hover{
+    transform: translateY(-1px);
+    transition: transform .12s ease, filter .12s ease;
+    filter: brightness(1.05);
+  }
+}
+
+/* Links (mailto) dentro de las tarjetitas */
+#timeline-embed .popbox .popsub > li a{
+  color: var(--txt-soft);
+  text-decoration: none;
+  border-bottom: 1px dashed rgba(243,231,235,.38);
+  font-weight: 800;
+}
+#timeline-embed .popbox .popsub > li a:hover{
+  border-bottom-color: rgba(243,231,235,.70);
+}
+
+/* Texto secundario (si quieres bajar un poco la intensidad) */
+#timeline-embed .popbox .popsub > li small,
+#timeline-embed .popbox .popsub > li .muted{
+  color: var(--txt-soft-2);
+}
 
 
 
@@ -933,6 +1030,7 @@
 
 </body>
 </html>
+
 
 
 
