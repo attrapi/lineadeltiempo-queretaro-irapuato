@@ -581,6 +581,16 @@
 #timeline-embed .tl-slide .tl-text-content .pop-wrap{
   position: relative;
 }
+    /* que NO recorte el popup */
+#timeline-embed .tl-slide .tl-text-content .tabla-contrato{
+  overflow: visible !important;
+}
+
+/* y sube el popup por si hay capas encima */
+#timeline-embed .tl-slide .tl-text-content .popbox{
+  z-index: 999999 !important;
+}
+
 
   </style>
 </head>
@@ -762,6 +772,7 @@
 
 </body>
 </html>
+
 
 
 
