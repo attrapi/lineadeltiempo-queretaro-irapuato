@@ -510,10 +510,34 @@
     position: absolute;
     width: 100%;
   }
-    link-post{
-      background: #691c32;
-    }
-
+    /*estilo botón superintendente*/
+.btn-link{
+    background: linear-gradient(135deg, #691c32 0%, #8b2a43 55%, #541426 100%);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,.18);
+    padding: .45rem .75rem;
+    border-radius: .75rem;
+    cursor: pointer;
+    font: inherit;
+    font-weight: 600;
+    box-shadow: 0 10px 22px rgba(105,28,50,.22);
+    transition: transform .12s ease, box-shadow .12s ease, filter .12s ease;
+  }
+  .btn-link:hover{
+    filter: brightness(1.05);
+    box-shadow: 0 14px 28px rgba(105,28,50,.28);
+    transform: translateY(-1px);
+  }
+  .btn-link:active{
+    transform: translateY(0);
+    box-shadow: 0 8px 18px rgba(105,28,50,.22);
+    filter: brightness(.98);
+  }
+  .btn-link:focus-visible{
+    outline: 3px solid rgba(105,28,50,.35);
+    outline-offset: 2px;
+  }
+  .btn-link .placeholder{ color: inherit; }
   </style>
 </head>
 
@@ -641,5 +665,6 @@
   </script>
 </body>
 </html>
+
 
 
