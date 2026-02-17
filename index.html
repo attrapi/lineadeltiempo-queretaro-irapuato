@@ -673,6 +673,81 @@
   margin-top: 8px;
 }
 
+    /*Tarjetas con gradientes*/
+    /* ====== SUBITEMS con gradiente moderno (sin tocar HTML) ====== */
+#timeline-embed .popbox .popsub > li{
+  position: relative;
+  padding: 10px 12px 10px 14px;
+  border-radius: 12px;
+  margin: 8px 0 0;
+
+  /* base + brillo suave */
+  background:
+    linear-gradient(135deg, rgba(255,255,255,.14), rgba(255,255,255,.06)),
+    linear-gradient(135deg, rgba(0,0,0,.18), rgba(0,0,0,.08));
+
+  border: 1px solid rgba(255,255,255,.18);
+
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.25;
+
+  /* separa mejor textos largos */
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/* “barra” de gradiente a la izquierda para que se note separación */
+#timeline-embed .popbox .popsub > li::before{
+  content:"";
+  position:absolute;
+  left: 8px;
+  top: 8px;
+  bottom: 8px;
+  width: 4px;
+  border-radius: 999px;
+
+  background: linear-gradient(180deg,
+    rgba(255,255,255,.55),
+    rgba(255,255,255,.12)
+  );
+  opacity: .9;
+}
+
+/* un “shine” arriba para look moderno */
+#timeline-embed .popbox .popsub > li::after{
+  content:"";
+  position:absolute;
+  left: 10px;
+  right: 10px;
+  top: 7px;
+  height: 1px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.18);
+  opacity: .7;
+}
+
+/* hover sutil */
+@media (hover:hover){
+  #timeline-embed .popbox .popsub > li:hover{
+    transform: translateY(-1px);
+    transition: transform .12s ease, filter .12s ease;
+    filter: brightness(1.04);
+  }
+}
+
+/* si adentro hay links (mailto), que hereden estilo limpio */
+#timeline-embed .popbox .popsub > li a{
+  color:#fff;
+  text-decoration:none;
+  border-bottom: 1px dashed rgba(255,255,255,.35);
+  font-weight: 800;
+}
+#timeline-embed .popbox .popsub > li a:hover{
+  border-bottom-color: rgba(255,255,255,.70);
+}
+
+
 
   </style>
 </head>
@@ -858,6 +933,7 @@
 
 </body>
 </html>
+
 
 
 
