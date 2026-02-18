@@ -1181,10 +1181,19 @@
 
   })();
 </script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll("a.tl-makelink[href^='mailto:']").forEach(a => {
+    // Si quieres texto plano siempre:
+    a.outerHTML = `<span>${a.textContent}</span>`;
+  });
+});
+</script>
 
 
 </body>
 </html>
+
 
 
 
