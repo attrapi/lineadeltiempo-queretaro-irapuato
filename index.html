@@ -1170,10 +1170,12 @@
   // =========================================
   (function () {
 
-    function closeAllPopups() {
-      document.querySelectorAll('#timeline-embed .js-popbox').forEach(p => p.hidden = true);
-      document.querySelectorAll('#timeline-embed .js-popbtn').forEach(b => b.setAttribute('aria-expanded', 'false'));
-    }
+  function closeAllPopups() {
+  document.querySelectorAll('#timeline-embed .js-popbox')
+    .forEach(p => p.classList.remove('is-open'));
+  document.querySelectorAll('#timeline-embed .js-popbtn')
+    .forEach(b => b.setAttribute('aria-expanded', 'false'));
+}
 
     document.addEventListener('click', function (e) {
       const btn = e.target.closest('#timeline-embed .js-popbtn');
@@ -1188,10 +1190,17 @@
         const box = td ? td.querySelector('.js-popbox') : null;
         if (!box) return;
 
-        const willOpen = box.hidden;
+        const willOpen = !box.classList.contains('is-open');
         closeAllPopups();
-        box.hidden = !willOpen;
-        btn.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+
+        if (willOpen) {
+          box.classList.add('is-open');
+          btn.setAttribute('aria-expanded', 'true');
+        } else {
+          box.classList.remove('is-open');
+          btn.setAttribute('aria-expanded', 'false');
+        }
+
 
         e.preventDefault();
         e.stopPropagation();
@@ -1220,6 +1229,7 @@
 
 </body>
 </html>
+
 
 
 
