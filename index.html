@@ -966,6 +966,24 @@
   object-fit: cover !important;
   object-position: 50% 25% !important; /* 👈 sube la cara (prueba 15%–35%) */
 }
+    /*codigo para que se vea el email completo dentro de diseño y construccion*/
+    /* ===========================
+   FIX: que NO se recorten correos con "..."
+   =========================== */
+#timeline-embed .popbox .popsub > li,
+#timeline-embed .popbox .popsub > li a{
+  white-space: normal !important;     /* permite salto de línea */
+  overflow: visible !important;        /* no escondas el final */
+  text-overflow: clip !important;      /* quita el "..." */
+  max-width: none !important;
+}
+
+/* opcional: dale un poquito más de aire al popup (mejor para correos largos) */
+#timeline-embed .popbox{
+  min-width: 320px !important;
+  max-width: min(620px, calc(100vw - 28px)) !important;
+}
+
 
 
 
@@ -1154,6 +1172,7 @@
 
 </body>
 </html>
+
 
 
 
