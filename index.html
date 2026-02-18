@@ -1182,17 +1182,42 @@
   })();
 </script>
 <script>
-document.addEventListener("DOMContentLoaded", () => {
-  document.querySelectorAll("a.tl-makelink[href^='mailto:']").forEach(a => {
-    // Si quieres texto plano siempre:
-    a.outerHTML = `<span>${a.textContent}</span>`;
-  });
-});
+(function () {
+  function fixMailtoText(root = document) {
+    root.querySelectorAll('#timeline-embed a.tl-makelink[href^="mailto:"]').forEach(a => {
+      const href = a.getAttribute('href') || '';
+      const email = href.replace(/^mailto:/i, '').trim();
+
+      if (!email) return;
+
+      // ✅ Reponer texto completo
+      a.textContent = email;
+
+      // Opcional: tooltip y que no lo “corte” por estilos
+      a.setAttribute('title', email);
+      a.style.whiteSpace = 'normal';
+      a.style.wordBreak = 'break-all';
+    });
+  }
+
+  // Primero intenta ya
+  fixMailtoText();
+
+  // ✅ TimelineJS renderiza después y re-renderiza al cambiar de slide,
+  // así que observamos cambios y volvemos a aplicar.
+  const embed = document.getElementById('timeline-embed');
+  if (!embed) return;
+
+  const mo = new MutationObserver(() => fixMailtoText(embed));
+  mo.observe(embed, { childList: true, subtree: true });
+})();
 </script>
+
 
 
 </body>
 </html>
+
 
 
 
