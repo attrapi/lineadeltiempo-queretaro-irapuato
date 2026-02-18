@@ -1188,29 +1188,11 @@
 
   })();
 </script>
-<script>
-(function () {
-  function fixMailtoText(root = document) {
-    root.querySelectorAll('#timeline-embed a.tl-makelink[href^="mailto:"]').forEach(a => {
-      const href = a.getAttribute('href') || '';
-      const email = href.replace(/^mailto:/i, '').trim();
-      if (email) a.textContent = email;
-    });
-  }
-
-  fixMailtoText();
-
-  const embed = document.getElementById('timeline-embed');
-  if (!embed) return;
-
-  new MutationObserver(() => fixMailtoText(embed))
-    .observe(embed, { childList: true, subtree: true });
-})();
-</script>
 
 
 </body>
 </html>
+
 
 
 
