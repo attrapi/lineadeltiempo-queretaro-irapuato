@@ -984,7 +984,19 @@
   min-width: 320px !important;
   max-width: min(620px, calc(100vw - 28px)) !important;
 }
+/*Arrego de link completo mailito*/
+/* Evita que TimelineJS corte correos con “…” */
+.tl-makelink{
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  word-break: break-all;   /* o: break-word */
+}
 
+/* Por si el recorte lo hace el contenedor del texto */
+.tl-text, .tl-text-content, .tl-slide-content, .tl-media-content, .tl-caption{
+  overflow: visible !important;
+}
 
 
 
@@ -1173,6 +1185,7 @@
 
 </body>
 </html>
+
 
 
 
