@@ -985,6 +985,25 @@
   max-width: min(620px, calc(100vw - 28px)) !important;
 }
 
+    /*Función de mailito*/
+    #timeline-embed a.tl-makelink[href^="mailto:"]{
+  display: inline !important;
+  max-width: none !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  white-space: normal !important;
+  word-break: break-all !important; /* o break-word */
+}
+
+#timeline-embed .tl-text,
+#timeline-embed .tl-text-content,
+#timeline-embed .tl-slide-content,
+#timeline-embed .tl-media-content,
+#timeline-embed .tl-caption{
+  overflow: visible !important;
+}
+
+
 
 
 
@@ -1169,10 +1188,30 @@
 
   })();
 </script>
+<script>
+(function () {
+  function fixMailtoText(root = document) {
+    root.querySelectorAll('#timeline-embed a.tl-makelink[href^="mailto:"]').forEach(a => {
+      const href = a.getAttribute('href') || '';
+      const email = href.replace(/^mailto:/i, '').trim();
+      if (email) a.textContent = email;
+    });
+  }
+
+  fixMailtoText();
+
+  const embed = document.getElementById('timeline-embed');
+  if (!embed) return;
+
+  new MutationObserver(() => fixMailtoText(embed))
+    .observe(embed, { childList: true, subtree: true });
+})();
+</script>
 
 
 </body>
 </html>
+
 
 
 
