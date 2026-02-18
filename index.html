@@ -1057,6 +1057,28 @@
   overflow-y: auto !important;
   -webkit-overflow-scrolling: touch;
 }
+    /* animación suave del popup (inline) */
+#timeline-embed .popbox.js-popbox{
+  /* estado cerrado */
+  max-height: 0 !important;
+  opacity: 0;
+  transform: translateY(-6px);
+  overflow: hidden !important;
+
+  transition:
+    max-height .65s ease,
+    opacity .65s ease,
+    transform .65s ease;
+}
+
+/* estado abierto */
+#timeline-embed .popbox.js-popbox.is-open{
+  max-height: 320px !important;
+  opacity: 1;
+  transform: translateY(0);
+  overflow-y: auto !important;
+}
+
 
 
 
@@ -1188,44 +1210,71 @@
   <script>
 (function () {
 
-  function closeAll() {
+  const DUR = 650; // duración (ms) = debe empatar con el CSS de transición
+
+  function closeBox(box){
+    if (!box) return;
+    box.classList.remove('is-open');
+    if (box._hideTimer) clearTimeout(box._hideTimer);
+    box._hideTimer = setTimeout(() => { box.hidden = true; }, DUR);
+  }
+
+  function openBox(box){
+    if (!box) return;
+    if (box._hideTimer) clearTimeout(box._hideTimer);
+    box.hidden = false;
+    // siguiente frame para que la transición sí corra
+    requestAnimationFrame(() => box.classList.add('is-open'));
+  }
+
+  function closeAll(exceptBox){
     document.querySelectorAll('#timeline-embed .js-popbox').forEach(box => {
-      box.classList.remove('is-open');
-      // espera a que cierre animación y lo oculta
-      setTimeout(() => { box.hidden = true; }, 560);
+      if (box === exceptBox) return;
+      closeBox(box);
     });
+
+    // aria-expanded
     document.querySelectorAll('#timeline-embed .js-popbtn').forEach(btn => {
       btn.setAttribute('aria-expanded', 'false');
     });
+
+    if (exceptBox){
+      const wrap = exceptBox.closest('.pop-wrap') || exceptBox.closest('td');
+      const btn = wrap ? wrap.querySelector('.js-popbtn') : null;
+      if (btn) btn.setAttribute('aria-expanded', 'true');
+    }
   }
 
-  function open(box, btn){
-    box.hidden = false;                 // ✅ quitar hidden
-    requestAnimationFrame(() => {       // ✅ para que anime
-      box.classList.add('is-open');
-    });
-    btn.setAttribute('aria-expanded', 'true');
-  }
-
-  document.addEventListener('click', function(e){
+  document.addEventListener('click', function (e) {
     const btn = e.target.closest('#timeline-embed .js-popbtn');
     const insideBox = e.target.closest('#timeline-embed .js-popbox');
-    if (insideBox) return; // click dentro -> no cerrar
 
-    if (btn){
+    // click dentro del popup: no cierres
+    if (insideBox) return;
+
+    // click en botón: toggle
+    if (btn) {
       const wrap = btn.closest('.pop-wrap') || btn.closest('td');
       const box = wrap ? wrap.querySelector('.js-popbox') : null;
       if (!box) return;
 
-      const willOpen = box.hidden || !box.classList.contains('is-open');
-      closeAll();
-      if (willOpen) open(box, btn);
+      const isOpen = !box.hidden && box.classList.contains('is-open');
+
+      if (isOpen) {
+        btn.setAttribute('aria-expanded', 'false');
+        closeBox(box);
+      } else {
+        closeAll(box);
+        btn.setAttribute('aria-expanded', 'true');
+        openBox(box);
+      }
 
       e.preventDefault();
       e.stopPropagation();
       return;
     }
 
+    // click fuera: cierra todo
     closeAll();
   }, true);
 
@@ -1238,8 +1287,10 @@
 
 
 
+
 </body>
 </html>
+
 
 
 
