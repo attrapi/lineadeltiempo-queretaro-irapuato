@@ -1002,13 +1002,26 @@
   word-break: break-all !important;
 }
     /*pop up ventana abre hacia arriba*/
-  /* 🔥 OVERRIDE FINAL: abrir popbox hacia arriba */
+/* ===========================
+   FIX FINAL: POPBOX INLINE
+   (no flota, no se corta)
+   =========================== */
 #timeline-embed .popbox{
+  position: static !important;   /* <- deja de ser absoluto */
   top: auto !important;
-  bottom: calc(100% + 10px) !important;   /* abre hacia arriba */
-  max-height: min(70vh, 360px) !important;
+  bottom: auto !important;
+  left: auto !important;
+
+  margin-top: 10px !important;
+  width: 100% !important;
+  max-width: 100% !important;
+
+  max-height: 320px !important; /* sigue teniendo scroll interno si quieres */
   overflow-y: auto !important;
+
+  z-index: 1 !important;         /* ya no necesita estar arriba de todo */
 }
+
 
 
   </style>
@@ -1195,6 +1208,7 @@
 
 </body>
 </html>
+
 
 
 
