@@ -984,6 +984,24 @@
   min-width: 320px !important;
   max-width: min(620px, calc(100vw - 28px)) !important;
 }
+    /*Mailito*/
+    /* Mailto: que se vea COMPLETO y NO sea link (sin click) */
+#timeline-embed a.tl-makelink[href^="mailto:"]{
+  pointer-events: none !important;   /* ya no se puede click */
+  cursor: text !important;
+  text-decoration: none !important;
+  border-bottom: none !important;
+  color: inherit !important;
+
+  /* quita el "..." */
+  display: inline !important;
+  max-width: none !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  white-space: normal !important;
+  word-break: break-all !important;
+}
+
 
   </style>
 </head>
@@ -1169,6 +1187,7 @@
 
 </body>
 </html>
+
 
 
 
