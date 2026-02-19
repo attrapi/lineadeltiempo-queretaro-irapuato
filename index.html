@@ -1101,7 +1101,28 @@
 #timeline-embed .tabla-contrato.tramo-2 .popbox .popsub > li *{
   text-shadow: none !important;
 }
+/*Sombra en letras de tramo2*/
+/* ==========================
+   SOLO LETRA con “sombra”
+   SOLO para TRAMO II
+   ========================== */
 
+/* conserva tu color suave SOLO en tramo-2 */
+#timeline-embed .tabla-contrato.tramo-2 .popbox,
+#timeline-embed .tabla-contrato.tramo-2 .popbox *{
+  color: var(--txt-soft) !important;
+}
+
+/* “sombra” bonita SOLO a los títulos (Representante Legal, Director, etc) */
+#timeline-embed .tabla-contrato.tramo-2 .popbox .poplist > li{
+  text-shadow: 0 1px 0 rgba(0,0,0,.55) !important;
+}
+
+/* para que correos y subitems NO queden pesados */
+#timeline-embed .tabla-contrato.tramo-2 .popbox .popsub > li,
+#timeline-embed .tabla-contrato.tramo-2 .popbox .popsub > li *{
+  text-shadow: none !important;
+}
 
 
 
@@ -1313,6 +1334,7 @@
 
 </body>
 </html>
+
 
 
 
