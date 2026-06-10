@@ -4,1364 +4,680 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="icon" type="image/png" href="favicon-tren-691C32-32.png" sizes="32x32">
-  <link rel="alternate" type="application/rss+xml" title="DOF - Sumario" href="URL_DEL_RSS">
-  <title>Timeline ARTF</title>
+  <title>Línea del Tiempo · Tren Querétaro – Irapuato</title>
 
-  <!-- CSS oficial de TimelineJS -->
-  <link title="timeline-styles" rel="stylesheet"
-        href="https://cdn.knightlab.com/libs/timeline3/latest/css/timeline.css">
+  <!-- ============================================================
+       PÁGINA AUTÓNOMA
+       - Toda la información vive aquí (constante SEGMENTOS, más abajo).
+       - No depende de Google Sheets ni de TimelineJS.
+       - Para actualizar datos: edita el arreglo SEGMENTOS y guarda.
+       ============================================================ -->
 
   <style>
     :root{
-      /* Colores institucionales */
-      --color-institucional:#691c32;      /* vino */
-      --color-institucional-sec:#96606f;  /* derivado */
-      --color-link:#96606f;
+      --guinda:#691c32;
+      --guinda-2:#96606f;
+      --tinta:#2a2226;
+      --gris:#6b6b6b;
+      --linea:#e3d6da;
+      --ok:#1f7a4d;
+      --alerta:#b3261e;
+      --bg:#f7f4f5;
+      --card:#ffffff;
+      --radio:14px;
+      --sombra:0 6px 22px rgba(105,28,50,.10);
+    }
+    *{ box-sizing:border-box; }
+    html,body{ margin:0; padding:0; }
+    body{
+      font-family:"Segoe UI",system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+      color:var(--tinta);
+      background:var(--bg);
+      line-height:1.5;
+    }
+    a{ color:var(--guinda-2); }
 
-      /* franja guinda inferior */
-      --franja-guinda:70px;
-
-      /* TABLAS PRO */
-      --t-line: rgba(255,255,255,.22);
-      --t-line-strong: rgba(255,255,255,.45);
-      --t-bg: rgba(255,255,255,.05);
-      --t-bg-2: rgba(0,0,0,.12);
-      --t-bg-3: rgba(255,255,255,.03);
-      --t-txt:#fff;
-      --t-txt-2: rgba(255,255,255,.88);
-      --t-radius:14px;
-    }
-
-    /* ========= CUADROS DE EVENTOS (TIMENAV) ========= */
-    .tl-timemarker-content-container,
-    .tl-timemarker-content-container-long,
-    .tl-timemarker-content-container-small{
-      background-color: var(--color-institucional);
-      color:#fff;
-      border-radius:4px;
-      border:1px solid rgba(0,0,0,0.15);
-    }
-    .tl-timemarker.tl-timemarker-with-end
-      .tl-timemarker-content-container,
-    .tl-timemarker.tl-timemarker-with-end
-      .tl-timemarker-content-container-long,
-    .tl-timemarker.tl-timemarker-with-end
-      .tl-timemarker-content-container-small{
-      background-color: var(--color-institucional-sec);
-    }
-
-    /* ========= LINKS EN TEXTO ========= */
-    .tl-text-content{
-      margin-top: 60px;
-    }
-    .tl-slide .tl-text-content a{
-      color: var(--color-link);
-      text-decoration:none;
-      font-weight:600;
-      border-bottom:1px dashed var(--color-link);
-    }
-    .tl-slide .tl-text-content a:hover{ text-decoration:underline; }
-
-    /* ========= ACORDEONES ========= */
-    .tl-slide .tl-text-content .accordion{ margin: .4em 0 .6em 0; }
-    .tl-slide .tl-text-content .accordion-summary{
-      cursor:pointer;
-      font-weight:600;
-      padding:.25em .6em;
-      border-radius:4px;
-      display:inline-block;
-      background: var(--color-institucional-sec);
-      color:#fff;
-      user-select:none;
-    }
-    .tl-slide .tl-text-content .accordion-body{
-      max-height:0;
-      overflow:hidden;
-      opacity:0;
-      transform: translateY(-4px);
-      transition: max-height .35s ease, opacity .35s ease, transform .35s ease;
-      margin-top:.25em;
-    }
-    .tl-slide .tl-text-content .accordion.is-open .accordion-body{
-      max-height:500px;
-      opacity:1;
-      transform: translateY(0);
-    }
-    .tl-slide .tl-text-content .accordion-body ul{
-      margin:.3em 0 0 1.2em;
-      padding-left:0;
-    }
-
-    /* ========= BASE ========= */
-    html, body{
-      background:#691C32;
-      margin:0;
-      padding:0;
-    }
-
-    /* franja guinda fija abajo (atrás) */
-    body::after{
-      content:"";
-      position:fixed;
-      left:0; right:0; bottom:0;
-      height: var(--franja-guinda);
-      background:#691C32;
-      pointer-events:none;
-      z-index:-1;
-    }
-
-    .tl-timeline h2.tl-headline-title{ white-space:nowrap; }
-
-    /* caption arriba de la foto */
-    .tl-media .tl-caption{
-      position:absolute;
-      top:0; left:0; right:0;
-      margin:0;
-      padding:12px 16px;
-      background: rgba(105, 28, 50, .85);
-      color:#fff;
-      font-weight:700;
-      text-transform:uppercase;
-      z-index:20;
-    }
-    /* para que el caption no tape imagen */
-    .tl-media .tl-media-content{ padding-top:52px; }
-
-    /*.titulo-foto{ font-size:x-large; margin-top:20px; }*/
-    .titulo-foto{
-  
-  max-width: 100%;
-  padding: 10px 14px;
-  margin: 10px 0 14px;
-  font-size: large;
-
-  /* look institucional limpio */
-  border-radius: 12px;
-  border: 1px solid rgba(255,255,255,.22);
-  background: rgba(0,0,0,.12);
-
-  color: #fff;
-  font-weight: 900;
-  letter-spacing: .8px;
-  text-transform: uppercase;
-  line-height: 1.1;
-
-  /* ✅ mata cualquier “línea/sombra” */
-  box-shadow: none !important;
-  outline: none !important;
-  filter: none !important;
-  text-shadow: none !important;
-}
-
-
-
-    /* fondo guinda detrás de la imagen (quita negro) */
-    #timeline-embed .tl-media,
-    #timeline-embed .tl-media-content-container,
-    #timeline-embed .tl-media-content,
-    #timeline-embed .tl-media-wrapper,
-    #timeline-embed .tl-slide-content-container{
-      background:#691C32 !important;
-    }
-    #timeline-embed .tl-media .tl-caption{
-      width:500px !important;
-      max-width: calc(100% - 24px) !important;
-      margin-top:8px;
-    }
-
-    /* oculta iconitos en timemarkers */
-    #timeline-embed .tl-timemarker-media-container [class^="tl-icon-"],
-    #timeline-embed .tl-timemarker-media-container [class*=" tl-icon-"]{
-      display:none !important;
-    }
-
-    /* tarjetas */
-    #timeline-embed .tl-slide .tl-text-content .role-card{
-      margin:10px 0;
-      padding:10px 12px;
-      border-radius:6px;
-      border:1px solid rgba(255,255,255,.22);
-      border-left:4px solid var(--color-institucional-sec);
-      background: rgba(255,255,255,.06);
-    }
-    #timeline-embed .tl-slide .tl-text-content .role-title{
-      font-size:12px;
-      font-weight:700;
-      letter-spacing:.5px;
-      text-transform:uppercase;
-      opacity:.95;
-      margin-bottom:4px;
-    }
-    #timeline-embed .tl-slide .tl-text-content .role-name{
-      font-size:16px;
-      font-weight:700;
-      line-height:1.1;
-    }
-
-    /* quita viñetas dentro del slide */
-    #timeline-embed .tl-slide .tl-text-content ul{
-      list-style:none;
-      padding-left:0;
-      margin-left:0;
-    }
-
-    /* resident cards */
-    #timeline-embed .tl-slide .tl-text-content .resident-card{
-      margin:14px 0;
-      padding:10px 10px;
-      border-radius:10px;
-      border:1px solid rgba(255,255,255,.18);
-      background: rgba(255,255,255,.05);
-    }
-    #timeline-embed .tl-slide .tl-text-content .resident-card hr{
-      border:0;
-      border-top:1px solid rgba(255,255,255,.18);
-      margin:10px 0;
-    }
-    #timeline-embed .tl-slide .tl-text-content .resident-card td{ line-height:1.25; }
-    #timeline-embed .tl-slide .tl-text-content .resident-card + .resident-card{
+    /* ---------- Encabezado ---------- */
+    .hero{
       position:relative;
-      padding-top:14px;
-    }
-    #timeline-embed .tl-slide .tl-text-content .resident-card + .resident-card:before{
-      content:"";
-      position:absolute;
-      top:0; left:0; right:0;
-      height:1px;
-      background: rgba(255,255,255,.18);
-    }
-
-    /* dividers */
-    #timeline-embed .tl-slide .tl-text-content .divider{
-      height:1px;
-      margin:14px 0;
-      background: linear-gradient(90deg,
-        rgba(255,255,255,0),
-        rgba(255,255,255,.28),
-        rgba(255,255,255,0)
-      );
-    }
-
-    /* SOLO para la diapositiva marcada como .slide-2 */
-    #timeline-embed .tl-slide:has(.slide-2) .tl-media .tl-media-content{
-      padding-top:1px !important;
-    }
-
-    /* ===== Contenedor timeline ===== */
-    .timeline-wrap{
-      width:100%;
-      height: calc(100vh - var(--franja-guinda));
-      min-height:650px;
-      overflow:hidden;
-      position:relative;
-      --collapsed-safe-bottom:90px;
-      --toggle-bottom:130px;
-      z-index:1;
-    }
-
-    .timeline-wrap.is-prehide #timeline-embed{ opacity:0; }
-
-    #timeline-embed{
-      width:100%;
-      height:100%;
-      transition: opacity .12s ease;
-    }
-
-    #timeline-embed .tl-timeline,
-    #timeline-embed .tl-storyslider,
-    #timeline-embed .tl-storyslider .tl-slider-container{
-      background:#691C32 !important;
-    }
-
-    /* colapsar timenav */
-    .timeline-wrap.is-collapsed #timeline-embed .tl-timenav,
-    .timeline-wrap.is-collapsed #timeline-embed .tl-timenav-wrapper,
-    .timeline-wrap.is-collapsed #timeline-embed .tl-timenav-container,
-    .timeline-wrap.is-collapsed #timeline-embed .tl-menubar{
-      display:none !important;
-      height:0 !important;
-      min-height:0 !important;
-      margin:0 !important;
-      padding:0 !important;
-      border:0 !important;
-    }
-    .timeline-wrap.is-collapsed #timeline-embed .tl-storyslider{
-      bottom:0 !important;
-      height:100% !important;
-    }
-    .timeline-wrap.is-collapsed #timeline-embed .tl-slide .tl-slide-scrollable-container,
-    .timeline-wrap.is-collapsed #timeline-embed .tl-slide .tl-slide-content-container,
-    .timeline-wrap.is-collapsed #timeline-embed .tl-slide .tl-text-content{
-      
-      box-sizing:border-box;
-    }
-
-    /* botón */
-    .timeline-toggle{
-      position:absolute;
-      right:14px;
-      bottom: var(--toggle-bottom);
-      z-index:99999;
-      background: rgba(0,0,0,.18);
-      border:1px solid rgba(255,255,255,.45);
+      background:linear-gradient(135deg,var(--guinda),#4a1322);
       color:#fff;
-      border-radius:10px;
-      padding:8px 12px;
-      font-size:12px;
-      font-weight:900;
-      letter-spacing:.8px;
-      text-transform:uppercase;
-      cursor:pointer;
-      backdrop-filter: blur(4px);
-    }
-    .timeline-toggle:hover{ background: rgba(0,0,0,.28); cursor:pointer !important; }
-
-    #toggle-timeline,
-    #toggle-timeline:hover,
-    #toggle-timeline:active,
-    #toggle-timeline:focus,
-    #toggle-timeline *{ cursor:pointer !important; }
-
-    /* Ocultar branding timeline */
-    #timeline-embed .tl-credit,
-    #timeline-embed .tl-attribution,
-    #timeline-embed .tl-attribution a,
-    #timeline-embed .tl-attribution .tl-logo,
-    #timeline-embed a.tl-logo,
-    #timeline-embed a.tl-credit,
-    .tl-credit,
-    .tl-attribution{
-      display:none !important;
-    }
-
-    /* evita brinco al cargar */
-    .timeline-wrap.is-prehide{ --toggle-bottom:10px; }
-    .timeline-wrap.is-prehide .timeline-toggle{
-      opacity:0 !important;
-      pointer-events:none !important;
-      transform: translateY(10px);
-      transition: opacity .15s ease, transform .15s ease;
-    }
-    .timeline-wrap .timeline-toggle{
-      transition: opacity .15s ease, transform .15s ease;
-    }
-
-    .tl-headline, .tl-headline-date{ display:none; }
-    .tl-text-content-container{ margin-top:-30px; }
-
-    /* =========================================================
-       TABLA CONTRATO + AVANCE (ÚNICO BLOQUE BUENO)
-       ========================================================= */
-
-    #timeline-embed .tl-slide .tl-text-content .tabla-contrato{
-      width:100% !important;
-      border-collapse: collapse !important;
-      table-layout: fixed;
-      color: var(--t-txt);
-      border:1px solid var(--t-line-strong) !important;
-      border-radius: var(--t-radius);
+      padding:9px 20px;
+      text-align:center;
       overflow:hidden;
-      background: var(--t-bg);
-      box-shadow:
-        0 18px 40px rgba(0,0,0,.35),
-        0 2px 0 rgba(255,255,255,.06) inset;
     }
-
-    #timeline-embed .tl-slide .tl-text-content .tabla-contrato th,
-    #timeline-embed .tl-slide .tl-text-content .tabla-contrato td{
-      padding:16px 14px;
-      border-bottom:1px solid var(--t-line) !important;
-      border-right:1px solid var(--t-line) !important;
-      vertical-align:middle;
-      line-height:1.25;
+    .hero img.mapa{
+      position:absolute; inset:0; width:100%; height:100%;
+      object-fit:cover; opacity:.16; filter:grayscale(.2);
     }
-
-    #timeline-embed .tl-slide .tl-text-content .tabla-contrato th:last-child,
-    #timeline-embed .tl-slide .tl-text-content .tabla-contrato td:last-child{
-      border-right:none !important;
+    .hero .wrap{
+      position:relative; max-width:1180px; margin:0 auto;
+      display:flex; align-items:center; justify-content:space-between; gap:6px 22px; flex-wrap:wrap;
     }
-
-    #timeline-embed .tl-slide .tl-text-content .tabla-contrato tr:last-child th,
-    #timeline-embed .tl-slide .tl-text-content .tabla-contrato tr:last-child td{
-      border-bottom:none !important;
+    .hero .hgroup{ display:flex; flex-direction:column; align-items:flex-start; gap:1px; text-align:left; }
+    .hero h1{ margin:0; font-size:clamp(16px,2.4vw,22px); letter-spacing:.3px; }
+    .hero .sub{ opacity:.85; font-size:clamp(11px,1.6vw,13px); }
+    .hero .resumen{
+      margin:0; display:flex; gap:8px; flex-wrap:wrap; justify-content:center;
     }
-
-    /* labels izquierda (Contrato/Residente/Supervisión) */
-    #timeline-embed .tl-slide .tl-text-content .tabla-contrato > tbody > tr > th{
-      width:34%;
-      text-align:left;
-      font-weight:900;
-      background: linear-gradient(180deg, rgba(0,0,0,.16), rgba(0,0,0,.06));
+    .chip{
+      background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.25);
+      border-radius:999px; padding:4px 11px; font-size:12px; backdrop-filter:blur(2px);
     }
+    .chip, .chip b{ font-size:12px; font-weight:400; }
 
-    /* valores */
-    #timeline-embed .tl-slide .tl-text-content .tabla-contrato td.valor{
-      color: var(--t-txt-2);
-      font-weight:700;
+    /* ---------- Dirección del proyecto ---------- */
+    .direccion{ max-width:1000px; margin:14px auto 0; padding:0 14px; }
+    .dir-wrap{ display:flex; flex-wrap:wrap; gap:10px; justify-content:center; }
+    .dir-card{
+      flex:1 1 260px; max-width:430px;
+      background:var(--card); border:1px solid var(--linea); border-left:4px solid var(--guinda);
+      border-radius:12px; padding:10px 14px; box-shadow:var(--sombra);
     }
-
-    /* placeholders */
-    #timeline-embed .tl-slide .tl-text-content .tabla-contrato .placeholder{
-      display:inline-block;
-      padding:8px 10px;
-      border-radius:10px;
-      background: rgba(255,255,255,.07);
-      border:1px dashed rgba(255,255,255,.28);
-      color: rgba(255,255,255,.82);
-      letter-spacing:.1px;
+    .dir-card .dir-rol{
+      display:block; font-size:11px; text-transform:uppercase; letter-spacing:.6px;
+      color:var(--guinda); font-weight:800;
     }
+    .dir-card .dir-nom{ display:block; font-size:15px; font-weight:700; color:var(--tinta); }
 
-    /* td que contiene la tabla interna */
-    #timeline-embed .tl-slide .tl-text-content .tabla-contrato td[colspan="2"]{
-      padding:0 !important;
-      border-right:none !important;
+    /* ---------- Línea del tiempo estilo presentación (TimelineJS) ---------- */
+    .tl{ max-width:1000px; margin:14px auto 0; }
+    .slide-wrap{ position:relative; padding:20px 14px 10px; }
+    .nav-arrow{
+      position:absolute; top:46%; transform:translateY(-50%); z-index:5;
+      width:46px; height:46px; border-radius:50%; border:0; cursor:pointer;
+      background:var(--guinda); color:#fff; font-size:26px; line-height:1;
+      box-shadow:0 4px 14px rgba(105,28,50,.35);
     }
+    .nav-arrow:hover{ background:var(--guinda-2); }
+    .nav-arrow.prev{ left:0; } .nav-arrow.next{ right:0; }
+    .nav-arrow[disabled]{ opacity:.25; cursor:default; }
+    .item{ animation:fade .28s ease; }
+    @keyframes fade{ from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:none;} }
 
-    /* tabla interna sin doble card */
-    #timeline-embed .tl-slide .tl-text-content .tabla-contrato td[colspan="2"] > .tabla-contrato{
-      border:none !important;
-      border-radius:0 !important;
-      box-shadow:none !important;
-      background:transparent !important;
+    /* Fechas de inicio y término, bien visibles */
+    .fechas{ display:flex; align-items:center; justify-content:center; gap:6px; margin:0 0 12px; flex-wrap:wrap; }
+    .fechas .f{ text-align:center; padding:6px 18px; }
+    .fechas .f .lbl{ font-size:11px; text-transform:uppercase; letter-spacing:.5px; color:var(--gris); }
+    .fechas .f .val{ font-size:18px; font-weight:800; color:var(--guinda); }
+    .fechas .flecha-f{ color:var(--guinda-2); font-size:22px; }
+
+    /* Barra de navegación inferior */
+    .timenav{
+      position:sticky; bottom:0; z-index:6; margin-top:18px;
+      background:#fff; border-top:1px solid var(--linea); box-shadow:0 -4px 16px rgba(105,28,50,.08);
+      padding:14px 0 12px;
     }
+    /* Carril que corre como carrusel (scroll horizontal suave) */
+    .timenav-scroll{ overflow-x:auto; overflow-y:hidden; scroll-behavior:smooth; padding:6px 0 4px; }
+    .timenav-inner{ position:relative; margin:0; }   /* width y height se fijan por JS */
 
-    /* ===== tabla-avance (subtabla) ===== */
-    #timeline-embed .tl-slide .tl-text-content .tabla-avance{
-      table-layout: fixed;
+    /* Eje y marcas de tiempo (años en grande, meses tenues) */
+    .eje{ position:absolute; left:0; right:0; height:3px; background:var(--linea); border-radius:3px; }
+    .tick-mes{ position:absolute; transform:translateX(-50%); text-align:center; color:#b9aeb2; font-size:10px; }
+    .tick-mes i{ display:block; width:1px; height:7px; background:var(--linea); margin:0 auto 2px; }
+    .tick-anio{ position:absolute; transform:translateX(-50%); text-align:center; color:var(--guinda); font-weight:800; font-size:14px; }
+    .tick-anio i{ display:block; width:2px; height:12px; background:var(--guinda-2); margin:0 auto 3px; }
+
+    /* Marcador de cada segmento (no se encima: se apila en niveles) */
+    .marker{ position:absolute; top:0; }
+    .marker .m-stem{ position:absolute; left:-1px; width:2px; background:var(--linea); }
+    .marker .m-dot{
+      position:absolute; left:-7px; width:14px; height:14px; border-radius:50%;
+      background:#fff; border:3px solid var(--guinda-2); box-sizing:border-box; transition:.15s;
     }
-
-    /* fila 1 (Plazo/Importe/Avance) */
-    #timeline-embed .tl-slide .tl-text-content .tabla-avance tr:first-child th{
-      background: var(--t-bg-2);
-      font-weight:900;
-      letter-spacing:.4px;
-      padding:12px 10px;
+    .marker .m-card{
+      position:absolute; transform:translateX(-50%); width:160px; cursor:pointer;
+      background:#faf6f7; border:1px solid var(--linea); border-radius:8px; padding:6px 8px;
+      text-align:center; transition:.15s; line-height:1.2;
     }
-    /* separadores fuertes en la fila de grupos (por colspans) */
-    #timeline-embed .tl-slide .tl-text-content .tabla-avance tr:first-child th:nth-child(1),
-    #timeline-embed .tl-slide .tl-text-content .tabla-avance tr:first-child th:nth-child(2){
-      border-right:2px solid var(--t-line-strong) !important; /* fin Plazo y fin Importe */
+    .marker .m-card b{ display:block; font-size:11.5px; color:var(--tinta); white-space:normal; word-break:break-word; }
+    .marker .m-card span{ font-size:10px; color:var(--gris); }
+    .marker:hover .m-card{ border-color:var(--guinda-2); }
+    .marker.activo .m-card{ background:var(--guinda); border-color:var(--guinda); }
+    .marker.activo .m-card b{ color:#fff; }
+    .marker.activo .m-card span{ color:rgba(255,255,255,.85); }
+    .marker.activo .m-dot{ border-color:var(--guinda); background:var(--guinda); transform:scale(1.15); }
+    .marker.activo .m-stem{ background:var(--guinda); }
+
+    .contador{ text-align:center; color:var(--gris); font-size:12px; margin-top:8px; }
+
+    /* Botón pestaña para contraer / expandir la línea del tiempo */
+    .tn-toggle{
+      position:absolute; top:-17px; left:50%; transform:translateX(-50%);
+      display:inline-flex; align-items:center; gap:8px;
+      background:var(--guinda); color:#fff; border:0; border-radius:999px;
+      padding:7px 18px; font-size:13px; font-weight:700; cursor:pointer;
+      box-shadow:0 5px 16px rgba(105,28,50,.35); white-space:nowrap; z-index:7;
+      animation:palpitar 0.9s ease 0.7s 3;   /* late 3 veces al cargar y se detiene */
     }
-
-    /* fila 2 (Inicio/Fin/...) -> evita encimarse */
-    #timeline-embed .tl-slide .tl-text-content .tabla-avance tr:nth-child(2) th{
-      background: rgba(255,255,255,.04);
-      font-weight:800;
-      font-size:13px;
-      padding:10px 6px;
-      white-space: normal !important;
-      overflow-wrap:anywhere;
-      word-break:break-word;
-      hyphens:auto;
-      line-height:1.1;
-      text-align:center;
+    .tn-toggle:hover{ background:var(--guinda-2); }
+    @keyframes palpitar{
+      0%,100%{ transform:translateX(-50%) scale(1);    box-shadow:0 5px 16px rgba(105,28,50,.35); }
+      50%    { transform:translateX(-50%) scale(1.09); box-shadow:0 6px 22px rgba(105,28,50,.6), 0 0 0 7px rgba(105,28,50,.18); }
     }
+    @media (prefers-reduced-motion:reduce){ .tn-toggle{ animation:none; } }
+    .tn-toggle .tn-ico{ display:inline-flex; }
+    .tn-toggle .tn-chev{ font-size:15px; line-height:1; transition:transform .3s ease; }
+    .timenav.colapsado .tn-toggle .tn-chev{ transform:rotate(180deg); }
 
-    /* valores internos */
-    #timeline-embed .tl-slide .tl-text-content .tabla-avance td{
-      background: var(--t-bg-3);
-      padding:10px 6px;
-      text-align:center;
+    /* Cuerpo plegable con transición suave */
+    .tn-body{
+      position:relative; overflow:hidden; opacity:1;
+      max-height:380px; transition:max-height .35s ease, opacity .25s ease, margin .35s ease;
     }
+    .timenav.colapsado{ padding-bottom:6px; }
+    .timenav.colapsado .tn-body{ max-height:0; opacity:0; margin:0; }
 
-    /* separadores fuertes entre grupos en filas con 7 columnas */
-    #timeline-embed .tl-slide .tl-text-content .tabla-avance tr:nth-child(2) th:nth-child(2),
-    #timeline-embed .tl-slide .tl-text-content .tabla-avance tr:nth-child(3) td:nth-child(2){
-      border-right:2px solid var(--t-line-strong) !important; /* fin Plazo */
+    /* Flechas dentro de la línea del tiempo */
+    .tn-arrow{
+      position:absolute; top:calc(50% - 6px); transform:translateY(-50%); z-index:4;
+      width:34px; height:34px; border-radius:50%; cursor:pointer;
+      background:#fff; color:var(--guinda); border:2px solid var(--guinda);
+      font-size:20px; line-height:1; box-shadow:0 2px 8px rgba(105,28,50,.18);
+      display:flex; align-items:center; justify-content:center;
     }
-    #timeline-embed .tl-slide .tl-text-content .tabla-avance tr:nth-child(2) th:nth-child(4),
-    #timeline-embed .tl-slide .tl-text-content .tabla-avance tr:nth-child(3) td:nth-child(4){
-      border-right:2px solid var(--t-line-strong) !important; /* fin Importe */
+    .tn-arrow:hover{ background:var(--guinda); color:#fff; }
+    .tn-arrow[disabled]{ opacity:.3; cursor:default; background:#fff; color:var(--guinda); }
+    .tn-arrow.prev{ left:8px; } .tn-arrow.next{ right:8px; }
+    .timenav-scroll{ margin:0 50px; }
+
+    .card{
+      background:var(--card); border-radius:var(--radio); box-shadow:var(--sombra);
+      overflow:hidden; border:1px solid var(--linea);
     }
-
-    /* hover suave */
-    @media (hover:hover){
-      #timeline-embed .tl-slide .tl-text-content .tabla-contrato > tbody > tr:hover > th,
-      #timeline-embed .tl-slide .tl-text-content .tabla-contrato > tbody > tr:hover > td{
-        background: rgba(255,255,255,.035);
-      }
+    .card-head{
+      background:linear-gradient(135deg,var(--guinda),var(--guinda-2));
+      color:#fff; padding:14px 18px;
     }
-
-    /* ===== Título tipo “tarjeta” (moderno, institucional) ===== */
-#timeline-embed .tl-slide .tl-text-content .titulo-foto{
-  display: inline-block;
-  margin: 10px 0 14px;
-  padding: 10px 14px;
-
-  border-radius: 12px;
-  border: 1px solid rgba(255,255,255,.35);
-  background: rgba(255,255,255,.06);
-
-  color: #fff;
-  font-weight: 900;
-  letter-spacing: .8px;
-  text-transform: uppercase;
-  line-height: 1.1;
-
-  box-shadow:
-    0 14px 30px rgba(0,0,0,.30),
-    0 2px 0 rgba(255,255,255,.06) inset;
-
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-}
-    .ndfHFb-c4YZDc-HiaYvf-haAclf .ndfHFb-c4YZDc-TvD9Pc-qnnXGd, .ndfHFb-c4YZDc-HiaYvf-RJLb9c {
-    height: 105%;
-    position: absolute;
-    width: 100%;
-  }
-    /*estilo botón superintendente*/
-.btn-link{
-    background: linear-gradient(135deg, #691c32 0%, #8b2a43 55%, #541426 100%);
-    color: #fff;
-    border: 1px solid rgba(255,255,255,.18);
-    padding: .45rem .75rem;
-    border-radius: .75rem;
-    cursor: pointer;
-    font: inherit;
-    font-weight: 600;
-    box-shadow: 0 10px 22px rgba(105,28,50,.22);
-    transition: transform .12s ease, box-shadow .12s ease, filter .12s ease;
-  }
-  .btn-link:hover{
-    filter: brightness(1.05);
-    box-shadow: 0 14px 28px rgba(105,28,50,.28);
-    transform: translateY(-1px);
-  }
-  .btn-link:active{
-    transform: translateY(0);
-    box-shadow: 0 8px 18px rgba(105,28,50,.22);
-    filter: brightness(.98);
-  }
-  .btn-link:focus-visible{
-    outline: 3px solid rgba(105,28,50,.35);
-    outline-offset: 2px;
-  }
-  .btn-link .placeholder{ color: inherit; }
-    /*Estilo cuadro de click en el boton pop up*/
-  .popbox{
-    position: absolute;
-    top: calc(100% + 10px);
-    left: 0;
-    min-width: 240px;
-    background: linear-gradient(135deg, #691c32 0%, #8b2a43 55%, #541426 100%);
-    border: 1px solid rgba(255,255,255,.18);
-    border-radius: 14px;
-    box-shadow: 0 18px 38px rgba(105,28,50,.28);
-    padding: 10px;
-    z-index: 999;
-    color: #fff;
-  }
-
-  .poplist li a{
-    display: block;
-    padding: 10px 10px;
-    border-radius: 12px;
-    color: #fff;
-    text-decoration: none;
-    font-weight: 600;
-  }
-
-  .poplist li a:hover{
-    background: rgba(255,255,255,.14);
-  }
-    .pop-wrap{ position: relative; }
-    .poplist{ margin:0; padding:0; }
-/* ✅ para que el popup NO se recorte por overflow:hidden del card */
-#timeline-embed .tl-slide .tl-text-content .tabla-contrato{
-  overflow: visible !important;
-}
-
-/* el TD que contiene botón + popup debe ser relativo */
-#timeline-embed .tl-slide .tl-text-content td.pop-wrap{
-  position: relative;
-}
-
-/* por si Timeline mete el td sin especificar td */
-#timeline-embed .tl-slide .tl-text-content .pop-wrap{
-  position: relative;
-}
-    /* que NO recorte el popup */
-#timeline-embed .tl-slide .tl-text-content .tabla-contrato{
-  overflow: visible !important;
-}
-
-/* y sube el popup por si hay capas encima */
-#timeline-embed .tl-slide .tl-text-content .popbox{
-  z-index: 999999 !important;
-}
-    /*Estilo dentro de apartado diseño y construccion*/
-/* ✅ Scroll dentro del popup cuando hay mucha info */
-.popbox{
-  max-height: 280px;      /* ajusta: 220-360 según te guste */
-  overflow-y: auto;       /* activa scroll vertical */
-  overscroll-behavior: contain;
-  -webkit-overflow-scrolling: touch; /* scroll suave en iPhone */
-}
-
-/* opcional: que no se desacomode el padding al aparecer el scroll */
-.popbox::-webkit-scrollbar{
-  width: 10px;
-}
-.popbox::-webkit-scrollbar-thumb{
-  background: rgba(255,255,255,.22);
-  border-radius: 10px;
-}
-.popbox::-webkit-scrollbar-track{
-  background: rgba(0,0,0,.12);
-}
-/*Comentaros de diseño del codigo de la lista de representate legal, Director General, y superintendente*/
-    /* ===== POPUP: lista bonita ===== */
-#timeline-embed .popbox{
-  max-height: 300px;         /* ajusta */
-  overflow-y: auto;
-  overflow-x: hidden;
-  -webkit-overflow-scrolling: touch;
-}
-
-/* lista principal */
-#timeline-embed .popbox .poplist{
-  margin: 0;
-  padding: 6px;
-}
-
-/* cada bloque (Representante Legal / Director / Superintendente) */
-#timeline-embed .popbox .poplist > li{
-  padding: 10px 10px 8px;
-  border-radius: 12px;
-  border: 1px solid rgba(255,255,255,.14);
-  background: rgba(0,0,0,.10);
-  margin: 8px 0;
-}
-
-/* el “título” del bloque = texto del LI antes del UL */
-#timeline-embed .popbox .poplist > li{
-  font-weight: 900;
-  letter-spacing: .5px;
-  text-transform: uppercase;
-  font-size: 12px;
-  line-height: 1.15;
-  background: #dadbdd;
-}
-
-/* sublista */
-#timeline-embed .popbox .popsub{
-  margin: 8px 0 0;
-  padding: 0;
-}
-
-/* items de la sublista */
-#timeline-embed .popbox .popsub > li{
-  margin: 6px 0 0;
-  padding: 8px 10px;
-  border-radius: 10px;
-  background: rgba(255,255,255,.08);
-  border: 1px solid rgba(255,255,255,.12);
-  font-size: 13px;
-  font-weight: 600;
-  text-transform: none;
-  letter-spacing: 0;
-}
-
-/* si el texto es largo, que corte bien */
-#timeline-embed .popbox .popsub > li{
-  overflow-wrap: anywhere;
-  word-break: break-word;
-}
-
-/* separador suave entre subitems */
-#timeline-embed .popbox .popsub > li + li{
-  margin-top: 8px;
-}
-
-    /*Tarjetas con gradientes*/
-    /* ====== SUBITEMS con gradiente moderno (sin tocar HTML) ====== */
-#timeline-embed .popbox .popsub > li{
-  position: relative;
-  padding: 10px 12px 10px 14px;
-  border-radius: 12px;
-  margin: 8px 0 0;
-
-  /* base + brillo suave */
-  background:
-    linear-gradient(135deg, rgba(255,255,255,.14), rgba(255,255,255,.06)),
-    linear-gradient(135deg, rgba(0,0,0,.18), rgba(0,0,0,.08));
-
-  border: 1px solid rgba(255,255,255,.18);
-
-  font-size: 13px;
-  font-weight: 700;
-  line-height: 1.25;
-
-  /* separa mejor textos largos */
-  overflow-wrap: anywhere;
-  word-break: break-word;
-}
-
-/* “barra” de gradiente a la izquierda para que se note separación */
-#timeline-embed .popbox .popsub > li::before{
-  content:"";
-  position:absolute;
-  left: 8px;
-  top: 8px;
-  bottom: 8px;
-  width: 4px;
-  border-radius: 999px;
-
-  background: linear-gradient(180deg,
-    rgba(255,255,255,.55),
-    rgba(255,255,255,.12)
-  );
-  opacity: .9;
-}
-
-/* un “shine” arriba para look moderno */
-#timeline-embed .popbox .popsub > li::after{
-  content:"";
-  position:absolute;
-  left: 10px;
-  right: 10px;
-  top: 7px;
-  height: 1px;
-  border-radius: 999px;
-  background: rgba(255,255,255,.18);
-  opacity: .7;
-}
-
-/* hover sutil */
-@media (hover:hover){
-  #timeline-embed .popbox .popsub > li:hover{
-    transform: translateY(-1px);
-    transition: transform .12s ease, filter .12s ease;
-    filter: brightness(1.04);
-  }
-}
-
-/* si adentro hay links (mailto), que hereden estilo limpio */
-#timeline-embed .popbox .popsub > li a{
-  color:#fff;
-  text-decoration:none;
-  border-bottom: 1px dashed rgba(255,255,255,.35);
-  font-weight: 800;
-}
-#timeline-embed .popbox .popsub > li a:hover{
-  border-bottom-color: rgba(255,255,255,.70);
-}
-/* ====== Ajuste “blanco” a tono institucional (suave) ====== */
-:root{
-  --txt-soft: rgba(243,231,235,.92);  /* blanco con tinte rosita */
-  --txt-soft-2: rgba(243,231,235,.78);
-  --guinda: #691c32;
-  --guinda-2: #8b2a43;
-  --guinda-3: #541426;
-}
-
-/* Texto general dentro del popup */
-#timeline-embed .popbox,
-#timeline-embed .popbox *{
-  color: var(--txt-soft);
-}
-
-/* ====== Tarjetitas (subitems) con gradiente guinda ====== */
-#timeline-embed .popbox .popsub{
-  margin: 8px 0 0 0;
-  padding: 0;
-}
-
-#timeline-embed .popbox .popsub > li{
-  position: relative;
-  padding: 10px 12px 10px 14px;
-  border-radius: 12px;
-  margin: 8px 0 0;
-
-  /* ✅ Gradiente guinda + capa brillo */
-  background:
-    linear-gradient(135deg, rgba(255,255,255,.12), rgba(255,255,255,.03)),
-    linear-gradient(135deg, rgba(105,28,50,.92), rgba(139,42,67,.72), rgba(84,20,38,.78));
-
-  border: 1px solid rgba(255,255,255,.18);
-
-  font-size: 13px;
-  font-weight: 750;
-  line-height: 1.25;
-
-  overflow-wrap: anywhere;
-  word-break: break-word;
-}
-
-/* barra lateral para separar visualmente */
-#timeline-embed .popbox .popsub > li::before{
-  content:"";
-  position:absolute;
-  left: 8px;
-  top: 8px;
-  bottom: 8px;
-  width: 4px;
-  border-radius: 999px;
-
-  background: linear-gradient(180deg,
-    rgba(243,231,235,.75),
-    rgba(243,231,235,.18)
-  );
-  opacity: .95;
-}
-
-/* shine superior (look moderno) */
-#timeline-embed .popbox .popsub > li::after{
-  content:"";
-  position:absolute;
-  left: 12px;
-  right: 12px;
-  top: 7px;
-  height: 1px;
-  border-radius: 999px;
-  background: rgba(243,231,235,.18);
-  opacity: .75;
-}
-
-/* Hover sutil */
-@media (hover:hover){
-  #timeline-embed .popbox .popsub > li:hover{
-    transform: translateY(-1px);
-    transition: transform .12s ease, filter .12s ease;
-    filter: brightness(1.05);
-  }
-}
-
-/* Links (mailto) dentro de las tarjetitas */
-#timeline-embed .popbox .popsub > li a{
-  color: var(--txt-soft);
-  text-decoration: none;
-  border-bottom: 1px dashed rgba(243,231,235,.38);
-  font-weight: 800;
-}
-#timeline-embed .popbox .popsub > li a:hover{
-  border-bottom-color: rgba(243,231,235,.70);
-}
-
-/* Texto secundario (si quieres bajar un poco la intensidad) */
-#timeline-embed .popbox .popsub > li small,
-#timeline-embed .popbox .popsub > li .muted{
-  color: var(--txt-soft-2);
-}
-/*Inicio modifica el texto dentro de los residentes*/
-    /* ==============================
-   ROLE CARDS + RESIDENT CARDS (look institucional moderno)
-   Pegar AL FINAL del <style>
-   ============================== */
-
-:root{
-  --card-grad: linear-gradient(135deg, rgba(105,28,50,.92) 0%, rgba(139,42,67,.78) 55%, rgba(84,20,38,.92) 100%);
-  --card-border: rgba(255,255,255,.18);
-  --txt-soft: rgba(255,255,255,.86);
-  --txt-softer: rgba(255,255,255,.72);
-  --line-soft: rgba(255,255,255,.16);
-  --line-strong: rgba(255,255,255,.28);
-}
-
-/* ==== ROLE CARD (Director/Subdirector/etc) ==== */
-#timeline-embed .tl-slide .tl-text-content .role-card{
-  background: var(--card-grad) !important;
-  border: 1px solid var(--card-border) !important;
-  border-left: 4px solid rgba(255,255,255,.26) !important;
-  border-radius: 14px !important;
-  padding: 12px 14px !important;
-  box-shadow: 0 18px 38px rgba(0,0,0,.28) !important;
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-}
-
-#timeline-embed .tl-slide .tl-text-content .role-title{
-  color: var(--txt-softer) !important;
-  font-size: 12px !important;
-  font-weight: 900 !important;
-  letter-spacing: .9px !important;
-  text-transform: uppercase !important;
-  margin-bottom: 6px !important;
-}
-
-#timeline-embed .tl-slide .tl-text-content .role-name{
-  color: var(--txt-soft) !important;
-  font-size: 16px !important;
-  font-weight: 900 !important;
-  line-height: 1.15 !important;
-}
-
-/* ==== DIVIDER más pro ==== */
-#timeline-embed .tl-slide .tl-text-content .divider{
-  height: 1px !important;
-  margin: 14px 0 !important;
-  background: linear-gradient(90deg, rgba(255,255,255,0), var(--line-strong), rgba(255,255,255,0)) !important;
-  opacity: .9 !important;
-}
-
-/* ==== RESIDENT CARD ==== */
-#timeline-embed .tl-slide .tl-text-content .resident-card{
-  background: linear-gradient(135deg, rgba(105,28,50,.55) 0%, rgba(0,0,0,.14) 55%, rgba(105,28,50,.40) 100%) !important;
-  border: 1px solid var(--card-border) !important;
-  border-radius: 16px !important;
-  box-shadow: 0 18px 40px rgba(0,0,0,.30) !important;
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-}
-
-/* tabla interna */
-#timeline-embed .tl-slide .tl-text-content .resident-card table{
-  color: var(--txt-soft) !important;
-  font-size: 12px !important;
-}
-
-#timeline-embed .tl-slide .tl-text-content .resident-card td{
-  border-top: 1px solid var(--line-soft);
-}
-
-#timeline-embed .tl-slide .tl-text-content .resident-card tr:first-child td,
-#timeline-embed .tl-slide .tl-text-content .resident-card tr:nth-child(2) td{
-  border-top: 0;
-}
-
-/* TRAMO (1a fila, el <strong>) */
-#timeline-embed .tl-slide .tl-text-content .resident-card tr:first-child strong{
-  display: inline-block;
-  padding: 8px 10px;
-  border-radius: 12px;
-  background: rgba(255,255,255,.06);
-  border: 1px solid rgba(255,255,255,.18);
-  color: rgba(255,255,255,.90);
-  letter-spacing: .6px;
-}
-
-/* Nombre (2a fila, el <strong>) */
-#timeline-embed .tl-slide .tl-text-content .resident-card tr:nth-child(2) strong{
-  color: rgba(255,255,255,.92);
-}
-
-/* Contratos (strong centrados) */
-#timeline-embed .tl-slide .tl-text-content .resident-card strong{
-  font-weight: 900;
-}
-
-/* Foto circular con “ring” */
-#timeline-embed .tl-slide .tl-text-content .resident-card img{
-  border: 2px solid rgba(255,255,255,.22) !important;
-  box-shadow: 0 14px 26px rgba(0,0,0,.35) !important;
-}
-
-/* Si pusiste inline border-left:2px solid azure; lo suavizamos sin tocar HTML */
-#timeline-embed .tl-slide .tl-text-content .resident-card td[style*="border-left:2px solid azure"]{
-  border-left: 2px solid rgba(255,255,255,.20) !important;
-}
-
-/* Texto largo (empresas) más suave y legible */
-#timeline-embed .tl-slide .tl-text-content .resident-card td{
-  color: rgba(255,255,255,.82) !important;
-}
-
-/* Opcional: mejora el espaciado vertical dentro de resident-card */
-#timeline-embed .tl-slide .tl-text-content .resident-card td{
-  padding-top: 6px !important;
-  padding-bottom: 6px !important;
-}
-/* Ajusta el encuadre dentro del círculo */
-#timeline-embed .tl-slide .tl-text-content .resident-card img{
-  object-fit: cover !important;
-  object-position: 50% 25% !important; /* 👈 sube la cara (prueba 15%–35%) */
-}
-    /*codigo para que se vea el email completo dentro de diseño y construccion*/
-    /* ===========================
-   FIX: que NO se recorten correos con "..."
-   =========================== */
-#timeline-embed .popbox .popsub > li,
-#timeline-embed .popbox .popsub > li a{
-  white-space: normal !important;     /* permite salto de línea */
-  overflow: visible !important;        /* no escondas el final */
-  text-overflow: clip !important;      /* quita el "..." */
-  max-width: none !important;
-}
-
-/* opcional: dale un poquito más de aire al popup (mejor para correos largos) */
-#timeline-embed .popbox{
-  min-width: 320px !important;
-  max-width: min(620px, calc(100vw - 28px)) !important;
-}
-    /*Mailito*/
-    /* Mailto: que se vea COMPLETO y NO sea link (sin click) */
-#timeline-embed a.tl-makelink[href^="mailto:"]{
-  pointer-events: none !important;   /* ya no se puede click */
-  cursor: text !important;
-  text-decoration: none !important;
-  border-bottom: none !important;
-  color: inherit !important;
-
-  /* quita el "..." */
-  display: inline !important;
-  max-width: none !important;
-  overflow: visible !important;
-  text-overflow: clip !important;
-  white-space: normal !important;
-  word-break: break-all !important;
-}
-    /*pop up ventana abre hacia arriba*/
-/* ===========================
-   FIX FINAL: POPBOX INLINE
-   (no flota, no se corta)
-   =========================== */
-#timeline-embed .popbox{
-  position: static !important;   /* <- deja de ser absoluto */
-  top: auto !important;
-  bottom: auto !important;
-  left: auto !important;
-  margin-top: 10px !important;
-  width: 90% !important;
-  max-width: 100% !important;
-  max-height: 320px !important; /* sigue teniendo scroll interno si quieres */
-  overflow-y: auto !important;
-  z-index: 1 !important;         /* ya no necesita estar arriba de todo */
-}
-/*Transition de hidden en tarjetas*/
-    #timeline-embed .popbox{
-  position: static !important;   /* <- deja de ser absoluto */
-  top: auto !important;
-  bottom: auto !important;
-  left: auto !important;
-
-  margin-top: 10px !important;
-  width: 100% !important;
-  max-width: 100% !important;
-
-  max-height: 320px !important; /* sigue teniendo scroll interno si quieres */
-  overflow-y: auto !important;
-
-  z-index: 1 !important;         /* ya no necesita estar arriba de todo */
-}
-    /* ===== Animación para POPBOX inline ===== */
-#timeline-embed .js-popbox{
-  /* que empiece cerrado aunque no tenga hidden */
-  max-height: 0 !important;
-  opacity: 0 !important;
-  transform: translateY(-6px) !important;
-  overflow: hidden !important;
-
-  transition:
-    max-height .55s ease,
-    opacity .25s ease,
-    transform .30s ease;
-}
-
-/* estado abierto */
-#timeline-embed .js-popbox.is-open{
-  max-height: 320px !important;   /* tu limite */
-  opacity: 1 !important;
-  transform: translateY(0) !important;
-
-  overflow-y: auto !important;
-  -webkit-overflow-scrolling: touch;
-}
-    /* animación suave del popup (inline) */
-#timeline-embed .popbox.js-popbox{
-  /* estado cerrado */
-  max-height: 0 !important;
-  opacity: 0;
-  transform: translateY(-6px);
-  overflow: hidden !important;
-
-  transition:
-    max-height .65s ease,
-    opacity .65s ease,
-    transform .65s ease;
-}
-
-/* estado abierto */
-#timeline-embed .popbox.js-popbox.is-open{
-  max-height: 320px !important;
-  opacity: 1;
-  transform: translateY(0);
-  overflow-y: auto !important;
-  width: 90% !important;
-}
- /*Estilo fondo letra para hijos del boton*/   
-/* ==========================
-   SOLO LETRA con “sombra”
-   SOLO para TRAMO II
-   ========================== */
-
-/* conserva tu color suave SOLO en tramo-2 */
-#timeline-embed .tabla-contrato.tramo-2 .popbox,
-#timeline-embed .tabla-contrato.tramo-2 .popbox *{
-  color: var(--txt-soft) !important;
-}
-
-/* “sombra” bonita SOLO a los títulos (Representante Legal, Director, etc) */
-#timeline-embed .tabla-contrato.tramo-2 .popbox .poplist > li{
-  text-shadow: 0 1px 0 rgba(0,0,0,.55) !important;
-}
-
-/* para que correos y subitems NO queden pesados */
-#timeline-embed .tabla-contrato.tramo-2 .popbox .popsub > li,
-#timeline-embed .tabla-contrato.tramo-2 .popbox .popsub > li *{
-  text-shadow: none !important;
-}
-/*Sombra en letras de tramo2*/
-/* ==========================
-   SOLO LETRA con “sombra”
-   SOLO para TRAMO II
-   ========================== */
-
-/* conserva tu color suave SOLO en tramo-2 */
-#timeline-embed .tabla-contrato.tramo-2 .popbox,
-#timeline-embed .tabla-contrato.tramo-2 .popbox *{
-  color: var(--txt-soft) !important;
-}
-
-/* “sombra” bonita SOLO a los títulos (Representante Legal, Director, etc) */
-#timeline-embed .tabla-contrato.tramo-2 .popbox .poplist > li{
-  text-shadow: 0 1px 0 rgba(0,0,0,.55) !important;
-}
-
-/* para que correos y subitems NO queden pesados */
-#timeline-embed .tabla-contrato.tramo-2 .popbox .popsub > li,
-#timeline-embed .tabla-contrato.tramo-2 .popbox .popsub > li *{
-  text-shadow: none !important;
-}
-
-
-
+    .card-head h2{ margin:0; font-size:19px; }
+    .card-head .km{ font-size:13px; opacity:.92; margin-top:2px; }
+    .card .foto{ width:100%; display:block; max-height:230px; object-fit:cover; background:#efe9eb; cursor:zoom-in; transition:filter .15s; }
+    .card .foto:hover{ filter:brightness(.92); }
+    .avatar{ width:46px; height:46px; border-radius:50%; object-fit:cover; vertical-align:middle;
+             margin-right:9px; border:2px solid var(--linea); cursor:zoom-in; }
+    .avatar:hover{ filter:brightness(.92); }
+    .avatar-lg{ width:62px; height:62px; border-radius:50%; object-fit:cover; float:left;
+                margin:2px 12px 4px 0; border:2px solid var(--linea); cursor:zoom-in; }
+
+    /* ---------- Modal / lightbox de fotos ---------- */
+    .modal{
+      position:fixed; inset:0; z-index:50; display:none;
+      align-items:center; justify-content:center; padding:24px;
+      background:rgba(20,8,12,.85); backdrop-filter:blur(2px); cursor:zoom-out;
+    }
+    .modal.open{ display:flex; }
+    .modal img{
+      max-width:96vw; max-height:90vh; border-radius:10px;
+      box-shadow:0 12px 40px rgba(0,0,0,.5); cursor:default;
+    }
+    .modal .cerrar{
+      position:absolute; top:14px; right:18px; width:42px; height:42px;
+      border:0; border-radius:50%; background:rgba(255,255,255,.15); color:#fff;
+      font-size:24px; line-height:1; cursor:pointer;
+    }
+    .modal .cerrar:hover{ background:rgba(255,255,255,.3); }
+    .modal .pie{
+      position:absolute; bottom:18px; left:0; right:0; text-align:center;
+      color:#fff; font-size:14px; opacity:.9; padding:0 20px;
+    }
+    .card-body{ padding:16px 18px; }
+
+    .filas{ width:100%; border-collapse:collapse; }
+    .filas th, .filas td{ text-align:left; padding:6px 0; vertical-align:top; font-size:14px; }
+    .filas th{ color:var(--gris); font-weight:600; width:120px; padding-right:12px; }
+    .placeholder{ color:#b9b0b3; }
+
+    /* ---------- Avance ---------- */
+    .avance{ margin-top:14px; border-top:1px dashed var(--linea); padding-top:12px; }
+    .avance .titulo{ font-size:12px; text-transform:uppercase; letter-spacing:.5px; color:var(--gris); }
+    .barra{ background:var(--linea); border-radius:999px; height:12px; overflow:hidden; margin:4px 0 2px; }
+    .barra > span{ display:block; height:100%; background:linear-gradient(90deg,var(--guinda),var(--guinda-2)); }
+    .barra-row{ margin:8px 0; }
+    .barra-row .lbl{ display:flex; justify-content:space-between; font-size:13px; }
+    .metricas{ display:flex; flex-wrap:wrap; gap:10px 22px; margin-top:10px; font-size:13px; }
+    .metricas div span{ display:block; color:var(--gris); font-size:11px; }
+    .metricas b{ font-size:14px; }
+    .desv-pos{ color:var(--ok); } .desv-neg{ color:var(--alerta); }
+
+    /* ---------- Responsables (desplegable) ---------- */
+    .toggle{
+      margin-top:14px; background:var(--guinda); border:1px solid var(--guinda); border-radius:10px;
+      color:#fff; font-weight:700; cursor:pointer; padding:11px 15px; width:100%;
+      text-align:left; font-size:14px; display:flex; justify-content:space-between; align-items:center;
+      box-shadow:0 2px 8px rgba(105,28,50,.22); transition:background .15s;
+    }
+    .toggle:hover{ background:var(--guinda-2); }
+    .toggle .flecha{ transition:transform .2s; }
+    .detalle{ display:none; padding:6px 2px 2px; }
+    .item.open .detalle{ display:block; }
+    .item.open .toggle .flecha{ transform:rotate(180deg); }
+    .persona{ padding:9px 0; border-bottom:1px solid var(--linea); overflow:hidden; }
+    .persona:last-child{ border-bottom:0; }
+    .persona .cargo{
+      display:inline-block; background:var(--guinda); color:#fff; font-weight:700;
+      font-size:10.5px; text-transform:uppercase; letter-spacing:.4px;
+      padding:3px 11px; border-radius:999px; margin-bottom:5px;
+    }
+    .persona .nom{ font-weight:700; }
+    .persona .ext{ font-size:13px; color:var(--gris); }
+
+    footer{ text-align:center; padding:22px; color:var(--gris); font-size:12px; }
+
+    @media (max-width:600px){
+      .nav-arrow{ width:38px; height:38px; font-size:22px; }
+      .slide-wrap{ padding:16px 6px 6px; }
+      .fechas .f{ padding:4px 10px; } .fechas .f .val{ font-size:16px; }
+      .card-head h2{ font-size:17px; }
+      .era .et{ display:none; }
+    }
   </style>
 </head>
-
 <body>
-  <div id="timeline-wrap" class="timeline-wrap is-prehide">
-    <div id="timeline-embed"></div>
 
-    <button id="toggle-timeline" class="timeline-toggle" type="button" aria-expanded="false">
-      Mostrar Cronología
-    </button>
+  <header class="hero">
+    <img class="mapa" src="mapa-tren.png" alt="" onerror="this.style.display='none'">
+    <div class="wrap">
+      <div class="hgroup">
+        <h1>Tren Querétaro – Irapuato</h1>
+        <span class="sub">Cronología de contratos, responsables y avances por tramo</span>
+      </div>
+      <div class="resumen" id="resumen"></div>
+    </div>
+  </header>
+
+  <section class="direccion" id="direccion"></section>
+
+  <main class="tl">
+    <div class="slide-wrap">
+      <button class="nav-arrow prev" id="prev" type="button" aria-label="Anterior">&lsaquo;</button>
+      <div id="slide"></div>
+      <button class="nav-arrow next" id="next" type="button" aria-label="Siguiente">&rsaquo;</button>
+    </div>
+    <div class="timenav" id="timenav">
+      <button class="tn-toggle" id="tn-toggle" type="button" aria-expanded="true" aria-controls="tn-body">
+        <span class="tn-ico" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="15" height="15"><path d="M4 7h16M4 12h16M4 17h10" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" fill="none"/></svg>
+        </span>
+        <span id="tn-label">Ocultar línea del tiempo</span>
+        <span class="tn-chev" aria-hidden="true">⌄</span>
+      </button>
+      <div class="tn-body" id="tn-body">
+        <button class="tn-arrow prev" id="tn-prev" type="button" aria-label="Tramo anterior">&lsaquo;</button>
+        <div class="timenav-scroll" id="timenav-scroll">
+          <div class="timenav-inner" id="timenav-inner"></div>
+        </div>
+        <button class="tn-arrow next" id="tn-next" type="button" aria-label="Tramo siguiente">&rsaquo;</button>
+        <div class="contador" id="contador"></div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    Información de obra · Avances al corte indicado en cada tramo.
+  </footer>
+
+  <!-- Modal para ver las fotos en grande -->
+  <div class="modal" id="modal" role="dialog" aria-modal="true" aria-label="Foto ampliada">
+    <button class="cerrar" id="modal-cerrar" type="button" aria-label="Cerrar">&times;</button>
+    <img id="modal-img" src="" alt="">
+    <div class="pie" id="modal-pie"></div>
   </div>
 
-  <!-- JS de TimelineJS -->
-  <script src="https://cdn.knightlab.com/libs/timeline3/latest/js/timeline.js"></script>
+  <!-- ============================================================
+       DATOS · Edita aquí para actualizar la página
+       ============================================================ -->
   <script>
-    var source = "v2:2PACX-1vTrhzy-gOn-UThOEccNA7-5ijY_ln-13xyFrHTlreZAJ0aGprAysbyfkzcWrr94FcZoDQTi3zowxELi";
+const DIRECCION = [
+  { "rol": "Director de Construcción B", "nombre": "David Gastón Terrazas de la Vega" },
+  { "rol": "Subdirector", "nombre": "Carlos Ernesto Pérez Cárdenas" }
+];
 
-    window.timeline = new TL.Timeline("timeline-embed", source, {
-      language: "es",
-      initial_zoom: 0,
-      font: "Default"
-    });
-
-    // acordeón
-    document.addEventListener('click', function (e) {
-      const summary = e.target.closest('.accordion-summary');
-      if (!summary) return;
-      if (e.target.tagName === 'A') return;
-      const accordion = summary.closest('.accordion');
-      if (!accordion) return;
-      accordion.classList.toggle('is-open');
-    });
-
-    const wrap = document.getElementById('timeline-wrap');
-    const btn  = document.getElementById('toggle-timeline');
-
-    function refreshTimelineHard(){
-      requestAnimationFrame(() => {
-        void wrap.offsetHeight;
-        window.timeline?.updateDisplay?.();
-        setTimeout(() => window.timeline?.updateDisplay?.(), 60);
-        setTimeout(() => window.timeline?.updateDisplay?.(), 220);
-      });
-    }
-
-    function updateToggleOffset(){
-      if (wrap.classList.contains('is-collapsed')) {
-        wrap.style.setProperty('--toggle-bottom', '10px');
-        return true;
-      }
-      const nav = document.querySelector('#timeline-embed .tl-timenav');
-      const gap = 10;
-      if (!nav) return false;
-      const navH = Math.ceil(nav.getBoundingClientRect().height);
-      if (navH <= 0) return false;
-      wrap.style.setProperty('--toggle-bottom', (navH + gap) + 'px');
-      return true;
-    }
-
-    (function ensureFirstCorrectButtonPosition(){
-      let tries = 0;
-      const maxTries = 240;
-      const tick = () => {
-        tries++;
-        const ok = updateToggleOffset();
-        if (ok || tries >= maxTries) return;
-        requestAnimationFrame(tick);
-      };
-      requestAnimationFrame(tick);
-    })();
-
-    const embed = document.getElementById('timeline-embed');
-    const mo = new MutationObserver(() => updateToggleOffset());
-    mo.observe(embed, { childList: true, subtree: true });
-
-    (function startCollapsedAfterReady(){
-      let tries = 0;
-      const maxTries = 240;
-      const tick = () => {
-        tries++;
-        const nav = document.querySelector('#timeline-embed .tl-timenav');
-        const ok = nav && nav.getBoundingClientRect().height > 0;
-
-        if (ok) {
-          wrap.classList.add('is-collapsed');
-          wrap.classList.remove('is-prehide');
-          btn.textContent = 'Mostrar Cronología';
-          btn.setAttribute('aria-expanded', 'false');
-          wrap.style.setProperty('--toggle-bottom', '10px');
-          refreshTimelineHard();
-          return;
-        }
-
-        if (tries >= maxTries) {
-          wrap.classList.remove('is-prehide');
-          refreshTimelineHard();
-          return;
-        }
-
-        requestAnimationFrame(tick);
-      };
-      requestAnimationFrame(tick);
-    })();
-
-    btn.addEventListener('click', () => {
-      const willCollapse = !wrap.classList.contains('is-collapsed');
-      wrap.classList.toggle('is-collapsed', willCollapse);
-
-      if (willCollapse) {
-        btn.textContent = 'Mostrar Cronología';
-        btn.setAttribute('aria-expanded', 'false');
-        wrap.style.setProperty('--toggle-bottom', '10px');
-      } else {
-        btn.textContent = 'OCULTAR';
-        btn.setAttribute('aria-expanded', 'true');
-        updateToggleOffset();
-      }
-      refreshTimelineHard();
-    });
-
-    window.addEventListener('resize', () => {
-      updateToggleOffset();
-      refreshTimelineHard();
-    });
+const SEGMENTOS = [
+  {
+    "titulo": "TRAMO I",
+    "km": "KM 5+600 AL KM 36+300",
+    "foto": "foto-tren.png",
+    "contrato": "ARTF/026-OP/2025",
+    "inicio": { "y": "2025", "m": "8", "d": "28" },
+    "fin": { "y": "2027", "m": "6", "d": "29" },
+    "residente": "Ing. Andrés Alejandro Aguirre Vieyra",
+    "residenteEmail": "aaguirre@sct.gob.mx",
+    "residenteFoto": "foto-aguirre-vieyra.png",
+    "empresaDC": "Mota Engil México S.A.P.I. de C.V.",
+    "repLegal": "Mota-Engil México, SAPI de C.V., Representada por Luis Alberto Carvalho Lança Dos Santos Mariano",
+    "director": "",
+    "superDC": "Efrain Valdez Roldan",
+    "superDCEmail": "efrain.valdez@mota-engil.com.mx",
+    "empresaSup": "Ayesa México S.A. de C.V.; Cal y Mayor y Asociados S.C.; Capital Humano Especializado KRA S.A. de C.V.",
+    "superSup": "Rigoberto Mendez Dominguez",
+    "superSupEmail": "jrmendez@mayalianzakra.com",
+    "plazoInicio": "28/08/2025",
+    "plazoFin": "29/06/2027",
+    "anticipo": "1,083,089,524.93",
+    "importe": "7,632,155,331.36",
+    "fechaAvance": "13/02/26",
+    "avanceFisico": "7.38",
+    "avanceFinanciero": "9.86",
+    "desviacion": "-2.48"
+  },
+  {
+    "titulo": "TRAMO II",
+    "km": "KM 36+300 AL KM 107+000",
+    "foto": "foto-tren.png",
+    "contrato": "ARTF/061-OP/2025",
+    "inicio": { "y": "2025", "m": "10", "d": "16" },
+    "fin": { "y": "2028", "m": "2", "d": "28" },
+    "residente": "Ing. Mario Eduardo Ortiz Marín",
+    "residenteEmail": "mario.ortiz@sict.gob.mx",
+    "residenteFoto": "foto-ortiz-marin.png",
+    "empresaDC": "Mota Engil México S.A.P.I. de C.V.",
+    "repLegal": "Mota-Engil México, SAPI de C.V., Representada por Luis Alberto Carvalho Lança Dos Santos Mariano",
+    "director": "",
+    "superDC": "Manuel Gerardo Gallardo Perez",
+    "superDCEmail": "manuel.gallardo@mota-engil.com.mx",
+    "empresaSup": "Scala Supervisión Consultoria Asesoria y Laboratorio S.A. de C.V.; Stratega P y S S.C.; Ingeniería de Proyectos e Infraestructuras Mexicanas S.A. de C.V.; Jesa Ingeniería S.A. de C.V.; Consultores de Ingeniería UG21 S.A. de C.V.",
+    "superSup": "José Patricio Peréz Peréz",
+    "superSupEmail": "jperez@scalapc.com",
+    "plazoInicio": "16/10/2025",
+    "plazoFin": "28/02/2028",
+    "anticipo": "1,973,251,548.96",
+    "importe": "17,417,178,859.48",
+    "fechaAvance": "13/02/26",
+    "avanceFisico": "6.32",
+    "avanceFinanciero": "7.32",
+    "desviacion": "-1.00"
+  },
+  {
+    "titulo": "TRAMO III",
+    "km": "KM 107+000 AL KM 108+200",
+    "foto": "foto-tren.png",
+    "contrato": "ATTRAPI/013-OP/2026",
+    "inicio": { "y": "2026", "m": "3", "d": "29" },
+    "fin": { "y": "2028", "m": "12", "d": "23" },
+    "residente": "Ing. Francisco Eray Moreno Castro",
+    "residenteEmail": "",
+    "residenteFoto": "foto-moreno-castro.png",
+    "empresaDC": "Comsa, Infraestructuras, S.A. de C.V., Comsa, S.A., Regiomontana de Construcción y Servicios, S.A.P.I. de C.V., Vise S.A. de C.V.",
+    "repLegal": "",
+    "director": "",
+    "superDC": "",
+    "superDCEmail": "",
+    "empresaSup": "Dozzer Construcción y Asesoría, S.A. de C.V., en participación conjunta con SGS de México, S.A. de C.V. y Servicios de Consultoría en Infraestructura Vial, S.A. de C.V.",
+    "superSup": "",
+    "superSupEmail": "",
+    "plazoInicio": "29/03/2026",
+    "plazoFin": "23/12/2028",
+    "anticipo": "",
+    "importe": "",
+    "fechaAvance": "",
+    "avanceFisico": "",
+    "avanceFinanciero": "",
+    "desviacion": ""
+  }
+];
   </script>
+
+  <!-- ============================================================
+       RENDER · construye la línea del tiempo a partir de SEGMENTOS
+       ============================================================ -->
   <script>
-(function () {
+    const MESES = ['','ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+    const esc = s => (s==null?'':String(s))
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    const has = s => s!=null && String(s).trim()!=='' && String(s).trim().toUpperCase()!=='XXX';
+    const fecha = o => {
+      if (!o || !has(o.y)) return '';
+      const d = has(o.d) ? o.d+' ' : '';
+      const m = has(o.m) ? MESES[+o.m]+' ' : '';
+      return d + m + o.y;
+    };
+    const money = v => { v=(v||'').replace(/\$/g,'').trim(); return v ? '$'+v : '—'; };
+    const pct   = v => { v=(v||'').trim(); return v!=='' ? v+'%' : '—'; };
+    const numero = v => parseFloat(String(v||'').replace(/[^0-9.\-]/g,'')) || 0;
 
-  const DUR = 650; // duración (ms) = debe empatar con el CSS de transición
-
-  function closeBox(box){
-    if (!box) return;
-    box.classList.remove('is-open');
-    if (box._hideTimer) clearTimeout(box._hideTimer);
-    box._hideTimer = setTimeout(() => { box.hidden = true; }, DUR);
-  }
-
-  function openBox(box){
-    if (!box) return;
-    if (box._hideTimer) clearTimeout(box._hideTimer);
-    box.hidden = false;
-    // siguiente frame para que la transición sí corra
-    requestAnimationFrame(() => box.classList.add('is-open'));
-  }
-
-  function closeAll(exceptBox){
-    document.querySelectorAll('#timeline-embed .js-popbox').forEach(box => {
-      if (box === exceptBox) return;
-      closeBox(box);
-    });
-
-    // aria-expanded
-    document.querySelectorAll('#timeline-embed .js-popbtn').forEach(btn => {
-      btn.setAttribute('aria-expanded', 'false');
-    });
-
-    if (exceptBox){
-      const wrap = exceptBox.closest('.pop-wrap') || exceptBox.closest('td');
-      const btn = wrap ? wrap.querySelector('.js-popbtn') : null;
-      if (btn) btn.setAttribute('aria-expanded', 'true');
+    function personasDe(s){
+      const out = [];
+      const add = (cargo, nombre, empresa, email, foto) => {
+        if (!has(nombre)) return;
+        out.push({ cargo, nombre, empresa: has(empresa)?empresa:'', email: has(email)?email:'', foto: has(foto)?foto:'' });
+      };
+      add('Residente de Obra', s.residente, '', s.residenteEmail, s.residenteFoto);
+      add('Director de Proyecto', s.director, s.empresaDC, '');
+      add('Superintendente D&C', s.superDC, s.empresaDC, s.superDCEmail);
+      add('Representante Legal', s.repLegal, s.empresaDC, '');
+      add('Superintendente de Supervisión', s.superSup, s.empresaSup, s.superSupEmail);
+      return out;
     }
-  }
 
-  document.addEventListener('click', function (e) {
-    const btn = e.target.closest('#timeline-embed .js-popbtn');
-    const insideBox = e.target.closest('#timeline-embed .js-popbox');
+    function detalle(s){
+      const personas = personasDe(s).map(p => `
+        <div class="persona">
+          ${p.foto ? `<img class="avatar-lg" data-zoom src="${esc(p.foto)}" alt="${esc(p.nombre)}">` : ''}
+          <div class="cargo">${esc(p.cargo)}</div>
+          <div class="nom">${esc(p.nombre)}</div>
+          ${p.empresa ? `<div class="ext">${esc(p.empresa)}</div>` : ''}
+          ${p.email ? `<div class="ext"><a href="mailto:${esc(p.email)}">${esc(p.email)}</a></div>` : ''}
+        </div>`).join('');
+      const empresas = `
+        ${has(s.empresaDC)  ? `<div class="persona"><div class="cargo">Empresa de Diseño y Construcción</div><div class="ext">${esc(s.empresaDC)}</div></div>` : ''}
+        ${has(s.empresaSup) ? `<div class="persona"><div class="cargo">Supervisión externa</div><div class="ext">${esc(s.empresaSup)}</div></div>` : ''}`;
+      return personas + empresas;
+    }
 
-    // click dentro del popup: no cierres
-    if (insideBox) return;
+    function avance(s){
+      const f = numero(s.avanceFisico), fin = numero(s.avanceFinanciero);
+      const desv = String(s.desviacion||'').trim();
+      const desvNum = numero(s.desviacion);
+      const desvClass = desvNum < 0 ? 'desv-neg' : 'desv-pos';
+      const corte = has(s.fechaAvance) ? ` · al ${esc(s.fechaAvance)}` : '';
+      return `
+        <div class="avance">
+          <div class="titulo">Avance${corte}</div>
+          <div class="barra-row">
+            <div class="lbl"><span>Físico</span><b>${pct(s.avanceFisico)}</b></div>
+            <div class="barra"><span style="width:${Math.min(f,100)}%"></span></div>
+          </div>
+          <div class="barra-row">
+            <div class="lbl"><span>Financiero</span><b>${pct(s.avanceFinanciero)}</b></div>
+            <div class="barra"><span style="width:${Math.min(fin,100)}%"></span></div>
+          </div>
+          <div class="metricas">
+            <div><span>Desviación</span><b class="${desvClass}">${desv!==''?desv+'%':'—'}</b></div>
+            <div><span>Importe del contrato</span><b>${money(s.importe)}</b></div>
+            <div><span>Anticipo</span><b>${money(s.anticipo)}</b></div>
+          </div>
+        </div>`;
+    }
 
-    // click en botón: toggle
-    if (btn) {
-      const wrap = btn.closest('.pop-wrap') || btn.closest('td');
-      const box = wrap ? wrap.querySelector('.js-popbox') : null;
-      if (!box) return;
+    // ---- Una diapositiva (tramo) ----
+    function slide(s){
+      const foto = has(s.foto) ? s.foto : 'foto-tren.png';
+      const ini = fecha(s.inicio), fin = fecha(s.fin);
+      return `
+        <div class="item">
+          <div class="card">
+            <div class="card-head">
+              <h2>${esc(s.titulo)}</h2>
+              <div class="km">${esc(s.km)}</div>
+            </div>
+            ${foto ? `<img class="foto" data-zoom src="${esc(foto)}" alt="${esc(s.titulo)}" loading="lazy" onerror="this.style.display='none'">` : ''}
+            <div class="card-body">
+              <div class="fechas">
+                <div class="f"><div class="lbl">Inicio</div><div class="val">${ini || '—'}</div></div>
+                ${fin ? '<div class="flecha-f">→</div><div class="f"><div class="lbl">Término</div><div class="val">'+fin+'</div></div>' : ''}
+              </div>
+              <table class="filas">
+                <tr><th>Contrato</th><td>${has(s.contrato)?esc(s.contrato):'<span class="placeholder">—</span>'}</td></tr>
+                <tr><th>Residente</th><td>${has(s.residenteFoto)?`<img class="avatar" data-zoom src="${esc(s.residenteFoto)}" alt="${esc(s.residente)}">`:''}${has(s.residente)?esc(s.residente):'<span class="placeholder">—</span>'}</td></tr>
+              </table>
+              ${avance(s)}
+              <button class="toggle" type="button">
+                <span>Responsables y empresas</span><span class="flecha">▾</span>
+              </button>
+              <div class="detalle">${detalle(s)}</div>
+            </div>
+          </div>
+        </div>`;
+    }
 
-      const isOpen = !box.hidden && box.classList.contains('is-open');
+    // meses absolutos para ubicar los hitos por fecha
+    const mesAbs = (o, fb) => {
+      const y = +(has(o&&o.y)?o.y:(fb&&fb.y)) || 0;
+      const m = +(has(o&&o.m)?o.m:1) || 1;
+      return y*12 + (m-1);
+    };
 
-      if (isOpen) {
-        btn.setAttribute('aria-expanded', 'false');
-        closeBox(box);
-      } else {
-        closeAll(box);
-        btn.setAttribute('aria-expanded', 'true');
-        openBox(box);
+    function init(){
+      // Ordena cronológicamente por fecha de inicio
+      const slides = SEGMENTOS.slice().sort((a,b)=>{
+        const A=a.inicio, B=b.inicio;
+        return (+A.y||9999)-(+B.y||9999) || (+A.m||13)-(+B.m||13) || (+A.d||32)-(+B.d||32);
+      });
+
+      // ----- Barra de navegación tipo TimelineJS (marcadores en niveles) -----
+      const MW = 160;        // ancho del marcador (px)
+      const ROWH = 46;       // alto de cada nivel
+      const AXIS_PAD = 36;   // espacio bajo el eje para meses y años
+      const PADX = 88;       // margen lateral (≥ medio marcador) para que no se corten los extremos
+      // El rango va de la 1ª a la última fecha de INICIO (los hitos), sin estirarse a las fechas de fin
+      const inis = slides.map(s=>mesAbs(s.inicio));
+      const min = Math.min(...inis) - 1, max = Math.max(...inis) + 1;
+      const rangoM = Math.max(max - min, 1);
+      // Escala: estira los meses para LLENAR el ancho disponible (sin hueco a la derecha)
+      const dispW = document.getElementById('timenav-scroll').clientWidth || 800;
+      const PXM = Math.max(40, (dispW - PADX*2) / rangoM);
+      const px = m => PADX + (m - min) * PXM;
+      const ancho = PADX*2 + rangoM * PXM;
+
+      // Apila los marcadores en niveles para que NO se encimen
+      const ordenX = slides.map((s,i)=>({i, x:px(mesAbs(s.inicio))})).sort((a,b)=>a.x-b.x);
+      const finNivel = [];   // x derecho ocupado por cada nivel
+      const nivelDe = {};
+      ordenX.forEach(o=>{
+        let r = 0;
+        while (finNivel[r]!=null && o.x - MW/2 < finNivel[r] + 12) r++;
+        finNivel[r] = o.x + MW/2;
+        nivelDe[o.i] = r;
+      });
+      const niveles = Math.max(finNivel.length, 1);
+      const ejeY = niveles*ROWH + 6;
+      const innerH = ejeY + AXIS_PAD;
+
+      // Marcas de tiempo: meses (tenues) y años (resaltados en enero)
+      let ticks = '';
+      for (let m=Math.ceil(min); m<=Math.floor(max); m++){
+        const x = px(m), mes = ((m % 12) + 12) % 12;
+        if (mes===0)
+          ticks += `<div class="tick-anio" style="left:${x}px; top:${ejeY+3}px"><i></i>${Math.floor(m/12)}</div>`;
+        else
+          ticks += `<div class="tick-mes" style="left:${x}px; top:${ejeY+4}px"><i></i>${MESES[mes+1]}</div>`;
       }
 
-      e.preventDefault();
-      e.stopPropagation();
-      return;
+      // Marcadores de tramo (tarjeta + tallo + punto sobre el eje)
+      const markers = slides.map((s,i)=>{
+        const x = px(mesAbs(s.inicio));
+        const cardTop = nivelDe[i]*ROWH;
+        const stemTop = cardTop + 34;
+        const stemH = Math.max(ejeY - stemTop, 0);
+        const per = [fecha(s.inicio), fecha(s.fin)].filter(Boolean).join(' – ');
+        return `<div class="marker" data-i="${i}" style="left:${x}px; height:${innerH}px">
+                  <div class="m-card" style="top:${cardTop}px"><b>${esc(s.titulo)}</b><span>${esc(per)}</span></div>
+                  <div class="m-stem" style="top:${stemTop}px; height:${stemH}px"></div>
+                  <div class="m-dot" style="top:${ejeY-6}px"></div>
+                </div>`;
+      }).join('');
+
+      const inner = document.getElementById('timenav-inner');
+      inner.style.width = ancho + 'px';
+      inner.style.height = innerH + 'px';
+      inner.innerHTML = `<div class="eje" style="top:${ejeY}px"></div>${ticks}${markers}`;
+
+      // Ajusta el tallo de cada marcador a la altura real de su tarjeta (por si el título usa 2 líneas)
+      inner.querySelectorAll('.marker').forEach(mk=>{
+        const card = mk.querySelector('.m-card');
+        const stem = mk.querySelector('.m-stem');
+        const top = card.offsetTop + card.offsetHeight + 4;
+        stem.style.top = top + 'px';
+        stem.style.height = Math.max(ejeY - top, 0) + 'px';
+      });
+
+      // Dirección del proyecto (Director / Subdirector)
+      document.getElementById('direccion').innerHTML =
+        '<div class="dir-wrap">' +
+        DIRECCION.filter(d=>has(d.nombre)).map(d=>
+          `<div class="dir-card"><span class="dir-rol">${esc(d.rol)}</span><span class="dir-nom">${esc(d.nombre)}</span></div>`
+        ).join('') +
+        '</div>';
+
+      // Resumen en el encabezado
+      document.getElementById('resumen').innerHTML = `
+        <div class="chip"><b>${SEGMENTOS.length}</b> tramos</div>
+        <div class="chip">KM <b>5+600 a 108+200</b></div>`;
+
+      const slideEl = document.getElementById('slide');
+      const prevBtn = document.getElementById('prev');
+      const nextBtn = document.getElementById('next');
+      const cont    = document.getElementById('contador');
+      const scroller  = document.getElementById('timenav-scroll');
+      const markerEls = [...document.querySelectorAll('.marker')];
+      const tn       = document.getElementById('timenav');
+      const tnToggle = document.getElementById('tn-toggle');
+      const tnLabel  = document.getElementById('tn-label');
+      const tnPrev   = document.getElementById('tn-prev');
+      const tnNext   = document.getElementById('tn-next');
+      let idx = 0;
+
+      function mostrar(i){
+        idx = Math.max(0, Math.min(i, slides.length-1));
+        slideEl.innerHTML = slide(slides[idx]);
+        markerEls.forEach((e,k)=>e.classList.toggle('activo', k===idx));
+        prevBtn.disabled = tnPrev.disabled = idx===0;
+        nextBtn.disabled = tnNext.disabled = idx===slides.length-1;
+        cont.textContent = `Tramo ${idx+1} de ${slides.length} · usa ‹ › o haz clic en la barra`;
+        // Carrusel: centra suavemente el marcador activo
+        const mk = markerEls[idx];
+        if (mk) scroller.scrollTo({ left: Math.max(0, mk.offsetLeft - scroller.clientWidth/2), behavior:'smooth' });
+      }
+
+      prevBtn.addEventListener('click', ()=>mostrar(idx-1));
+      nextBtn.addEventListener('click', ()=>mostrar(idx+1));
+      tnPrev.addEventListener('click', ()=>mostrar(idx-1));
+      tnNext.addEventListener('click', ()=>mostrar(idx+1));
+      markerEls.forEach(e=>e.addEventListener('click', ()=>mostrar(+e.dataset.i)));
+
+      // Contraer / expandir la línea del tiempo
+      tnToggle.addEventListener('click', ()=>{
+        const colap = tn.classList.toggle('colapsado');
+        tnToggle.setAttribute('aria-expanded', String(!colap));
+        tnLabel.textContent = colap ? 'Mostrar línea del tiempo' : 'Ocultar línea del tiempo';
+      });
+
+      // Foto en grande (modal) y desplegar responsables — delegación
+      const modal=document.getElementById('modal'), modalImg=document.getElementById('modal-img'), modalPie=document.getElementById('modal-pie');
+      document.querySelector('.slide-wrap').addEventListener('click', e=>{
+        const foto = e.target.closest('[data-zoom]');
+        if (foto){
+          modalImg.src = foto.getAttribute('src');
+          modalImg.alt = foto.getAttribute('alt') || '';
+          modalPie.textContent = foto.getAttribute('alt') || '';
+          modal.classList.add('open'); document.body.style.overflow='hidden'; return;
+        }
+        const btn = e.target.closest('.toggle');
+        if (btn) btn.closest('.item').classList.toggle('open');
+      });
+      function cerrarModal(){ modal.classList.remove('open'); document.body.style.overflow=''; }
+      modal.addEventListener('click', e=>{ if (e.target!==modalImg) cerrarModal(); });
+      document.addEventListener('keydown', e=>{
+        if (e.key==='Escape') cerrarModal();
+        else if (e.key==='ArrowLeft')  mostrar(idx-1);
+        else if (e.key==='ArrowRight') mostrar(idx+1);
+      });
+
+      mostrar(0);
     }
 
-    // click fuera: cierra todo
-    closeAll();
-  }, true);
-
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeAll();
-  });
-
-})();
-</script>
-
-
-
-
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
